@@ -275,6 +275,12 @@ catalog = [
   }
 ]
 
+previous_analytic_titles = {
+  "Análise qualitativa e quantitativa" => "Qualitativa e quantitativa",
+  "Concentração e unidades" => "Concentração comum",
+  "Titulações e análise gravimétrica" => "Titulação e ponto de equivalência"
+}
+
 catalog.each_with_index do |subject_data, subject_index|
   lessons_data = subject_data.delete(:lessons)
   subject = Subject.find_or_initialize_by(slug: subject_data[:slug])
@@ -284,7 +290,12 @@ catalog.each_with_index do |subject_data, subject_index|
     lesson_data = lesson_data.dup
     lesson_type = lesson_data.delete(:lesson_type) || "lesson"
     quiz_questions_data = lesson_data.delete(:quiz_questions)
-    lesson = subject.lessons.find_or_initialize_by(title: lesson_data[:title])
+    previous_title = previous_analytic_titles[lesson_data[:title]] if subject.slug == "quimica-analitica"
+    lesson = subject.lessons.find_by(title: previous_title) if previous_title
+    lesson ||= subject.lessons.find_or_initialize_by(title: lesson_data[:title])
+    if previous_title && lesson.persisted?
+      subject.lessons.where(title: lesson_data[:title]).where.not(id: lesson.id).destroy_all
+    end
     lesson.update!(lesson_data.merge(lesson_type: "lesson", position: lesson_index + 1, xp: lesson_type == "assessment" ? 20 : 10))
 
     next unless lesson_type == "assessment"
