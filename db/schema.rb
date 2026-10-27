@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_10_27_180000) do
+ActiveRecord::Schema[8.1].define(version: 2026_10_27_203137) do
   create_table "lessons", force: :cascade do |t|
     t.integer "subject_id", null: false
     t.string "title", null: false
@@ -28,7 +28,24 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_27_180000) do
     t.integer "position", default: 0, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "lesson_type", default: "lesson", null: false
     t.index ["subject_id"], name: "index_lessons_on_subject_id"
+  end
+
+  create_table "quiz_questions", force: :cascade do |t|
+    t.integer "lesson_id", null: false
+    t.text "question", null: false
+    t.string "option_a", null: false
+    t.string "option_b", null: false
+    t.string "option_c", null: false
+    t.string "option_d", null: false
+    t.string "correct_option", null: false
+    t.text "explanation", null: false
+    t.integer "position", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["lesson_id", "position"], name: "index_quiz_questions_on_lesson_id_and_position", unique: true
+    t.index ["lesson_id"], name: "index_quiz_questions_on_lesson_id"
   end
 
   create_table "subjects", force: :cascade do |t|
@@ -44,4 +61,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_10_27_180000) do
   end
 
   add_foreign_key "lessons", "subjects"
+  add_foreign_key "quiz_questions", "lessons"
 end

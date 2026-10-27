@@ -11,7 +11,7 @@ Uma plataforma educativa em português para estudantes de cursos técnicos e de 
 - Operações Básicas de Laboratório
 - Operações Unitárias
 
-Cada trilha começa pelos fundamentos e reúne três aulas introdutórias. As respostas corretas concluem a aula e concedem XP; o progresso fica salvo na sessão do navegador, sem necessidade de criar uma conta.
+As trilhas começam pelos fundamentos. Química Analítica inclui aulas sobre planejamento, amostragem, concentração, soluções e avaliação de resultados, além de um teste final de dez questões. É preciso acertar pelo menos 70% para concluir o teste e receber XP. Nas demais aulas, as respostas corretas concluem a aula e concedem XP; o progresso fica salvo na sessão do navegador, sem necessidade de criar uma conta.
 
 ## Requisitos
 
@@ -45,7 +45,7 @@ Este é um aplicativo Rails dinâmico: GitHub Pages não executa o servidor Rail
 3. Revise e implante o serviço gratuito descrito em `render.yaml`.
 4. Após o deploy terminar, abra o endereço `.onrender.com` exibido no painel do Render.
 
-Ao fornecer somente a URL pública, o Render não recebe notificações de novos commits. Conecte sua conta GitHub ao Render para habilitar atualizações automáticas; sem essa integração, sincronize o Blueprint e implante a versão mais recente manualmente pelo painel.
+Ao fornecer somente a URL pública, o Render não recebe notificações de novos commits. Conecte sua conta GitHub ao Render para habilitar atualizações automáticas; sem essa integração, sincronize o Blueprint e implante a versão mais recente manualmente pelo painel. A inicialização prepara o banco e reaplica as sementes de forma idempotente para manter o catálogo atualizado após cada implantação.
 
 O Render gratuito suspende o serviço após 15 minutos sem acessos; a primeira visita após a suspensão pode levar cerca de um minuto para carregar. O plano gratuito é para testes e projetos pessoais. Consulte as [limitações do Render gratuito](https://render.com/docs/free).
 

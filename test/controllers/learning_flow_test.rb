@@ -45,6 +45,61 @@ class LearningFlowTest < ActionDispatch::IntegrationTest
     assert_select ".answer-option", 4
   end
 
+  test "student can open the final assessment with ten questions" do
+    assessment = create_assessment
+
+    get subject_path(@subject.slug)
+    assert_response :success
+    assert_select ".subject-meta", /1 avaliação final/
+    assert_select ".lesson-row", 2
+    assert_select ".lesson-row small", /Teste final/
+
+    get lesson_path(subject_slug: @subject.slug, id: assessment.id)
+
+    assert_response :success
+    assert_select ".assessment-question", 10
+    assert_select ".assessment-instructions", /pelo menos 7/
+  end
+
+  test "passing the final assessment records progress and awards XP" do
+    assessment = create_assessment
+
+    post answer_lesson_path(subject_slug: @subject.slug, id: assessment.id),
+      params: { answers: assessment_answers(assessment, correct_count: 7) }
+
+    assert_redirected_to lesson_path(subject_slug: @subject.slug, id: assessment.id, anchor: "exercicio")
+    follow_redirect!
+    assert_response :success
+    assert_select ".feedback-correct", /Teste aprovado/
+    assert_select ".completed-note"
+  end
+
+  test "a score below seventy percent does not complete the final assessment" do
+    assessment = create_assessment
+
+    post answer_lesson_path(subject_slug: @subject.slug, id: assessment.id),
+      params: { answers: assessment_answers(assessment, correct_count: 6) }
+
+    assert_redirected_to lesson_path(subject_slug: @subject.slug, id: assessment.id, anchor: "exercicio")
+    follow_redirect!
+    assert_response :success
+    assert_select ".feedback-retry", /São necessárias 7 respostas certas/
+    assert_select ".needs-review", 4
+    assert_select ".completed-note", count: 0
+  end
+
+  test "final assessment rejects incomplete submissions" do
+    assessment = create_assessment
+    answers = assessment_answers(assessment, correct_count: 10)
+    answers.delete(assessment.quiz_questions.last.id.to_s)
+
+    post answer_lesson_path(subject_slug: @subject.slug, id: assessment.id), params: { answers: answers }
+
+    follow_redirect!
+    assert_select ".feedback-retry", /Responda todas as questões/
+    assert_select ".completed-note", count: 0
+  end
+
   test "correct answer awards points and marks the lesson complete" do
     post answer_lesson_path(subject_slug: @subject.slug, id: @lesson.id), params: { answer: "a" }
 
@@ -72,5 +127,46 @@ class LearningFlowTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_select ".feedback-retry"
     assert_select ".completed-note", count: 0
+  end
+
+  private
+
+  def create_assessment
+    assessment = @subject.lessons.create!(
+      title: "Teste final",
+      summary: "Avaliação dos fundamentos.",
+      concept: "Acerte pelo menos sete questões.",
+      example: "Revise as aulas antes de começar.",
+      question: "Responda às questões.",
+      option_a: "Respostas disponíveis nas questões do teste.",
+      option_b: "Respostas disponíveis nas questões do teste.",
+      option_c: "Respostas disponíveis nas questões do teste.",
+      option_d: "Respostas disponíveis nas questões do teste.",
+      correct_option: "a",
+      explanation: "Cada questão apresenta suas próprias alternativas e explicação.",
+      xp: 20,
+      position: 2
+    )
+
+    10.times do |index|
+      assessment.quiz_questions.create!(
+        question: "Questão #{index + 1}",
+        option_a: "Alternativa correta",
+        option_b: "Alternativa incorreta",
+        option_c: "Outra alternativa incorreta",
+        option_d: "Última alternativa incorreta",
+        correct_option: "a",
+        explanation: "Revise o conceito da questão.",
+        position: index + 1
+      )
+    end
+    assessment.update!(lesson_type: "assessment")
+    assessment
+  end
+
+  def assessment_answers(assessment, correct_count:)
+    assessment.quiz_questions.each_with_index.to_h do |question, index|
+      [ question.id.to_s, index < correct_count ? "a" : "b" ]
+    end
   end
 end

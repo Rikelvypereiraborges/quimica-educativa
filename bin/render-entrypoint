@@ -2,4 +2,5 @@
 set -e
 
 ./bin/rails db:prepare
+./bin/rails db:seed
 exec ./bin/rails server

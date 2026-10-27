@@ -1,31 +1,125 @@
 catalog = [
   {
     name: "Química Analítica", slug: "quimica-analitica", icon: "AN", color: "#c5e1cc",
-    description: "Descubra o que existe em uma amostra e em que quantidade.",
+    description: "Planeje análises, prepare soluções e interprete resultados com confiança.",
     lessons: [
       {
-        title: "Qualitativa e quantitativa", summary: "Duas perguntas fundamentais sobre qualquer amostra.",
-        concept: "A análise qualitativa identifica quais substâncias ou íons estão presentes. A análise quantitativa determina quanto de cada componente existe na amostra.",
-        example: "Um teste de água pode identificar a presença de cloreto (qualitativa) e medir sua concentração em mg/L (quantitativa).",
+        title: "Análise qualitativa e quantitativa", summary: "Identifique as espécies presentes e determine quanto há de cada uma.",
+        concept: "A Química Analítica reúne métodos para separar, identificar e determinar a quantidade dos componentes de uma amostra.\n\nA análise qualitativa pergunta quais espécies químicas estão presentes. A análise quantitativa expressa em números a quantidade ou concentração de uma espécie, chamada analito.\n\nUma investigação começa ao transformar uma dúvida ampla em uma pergunta específica que possa ser respondida por medidas químicas.",
+        example: "Para avaliar água, identificar se há íons cloreto é uma análise qualitativa. Medir a concentração desses íons, por exemplo em mg/L, é uma análise quantitativa.",
         question: "Qual pergunta corresponde a uma análise quantitativa?",
         option_a: "Quais íons estão presentes na amostra?", option_b: "Qual é a concentração de cálcio na água?", option_c: "A amostra contém ferro?", option_d: "Quais substâncias formam o sólido?",
         correct_option: "b", explanation: "Concentração é uma medida de quantidade, por isso a pergunta é quantitativa."
       },
       {
-        title: "Concentração comum", summary: "Relacione a massa de soluto ao volume da solução.",
-        concept: "A concentração comum relaciona a massa do soluto ao volume da solução: C = m / V. No SI, é comum expressá-la em g/L.",
-        example: "Dissolver 10 g de sal e completar o volume para 2 L resulta em concentração de 5 g/L.",
+        title: "Concentração e unidades", summary: "Expresse a quantidade de soluto com unidades claras e adequadas.",
+        concept: "Solução é uma mistura homogênea. O soluto é a substância dissolvida e o solvente é o meio que a dissolve. Concentração relaciona a quantidade de soluto a uma quantidade definida de solução ou, em algumas unidades, de solvente.\n\nConcentração em massa: C = massa do soluto (g) / volume da solução (L), expressa em g/L. Concentração em quantidade de matéria (molaridade): c = quantidade de soluto (mol) / volume da solução (L), em mol/L.\n\nTambém se usam porcentagens, como % m/m (g de soluto por 100 g de solução) e % m/v (g por 100 mL de solução). ppm e ppb são razões em massa; em água muito diluída, podem ser aproximadas por mg/L e µg/L, respectivamente. Sempre informe a base e as unidades, pois dizer apenas ppm ou % pode ser ambíguo.\n\nNormalidade (equivalentes por litro) aparece em materiais de análise clássica, mas o equivalente depende da reação considerada. Ao usá-la, especifique a reação; mol/L costuma ser mais direto para comunicar a concentração.",
+        example: "Uma solução preparada com 10 g de soluto e volume final de 2 L tem concentração em massa de 5 g/L. Se uma alíquota for transferida para outro frasco, a concentração permanece a mesma enquanto não houver diluição ou perda de soluto.",
         question: "Uma solução contém 12 g de soluto em 3 L. Qual é sua concentração?",
         option_a: "4 g/L", option_b: "9 g/L", option_c: "15 g/L", option_d: "36 g/L",
         correct_option: "a", explanation: "Aplicando C = m / V: 12 g / 3 L = 4 g/L."
       },
       {
-        title: "Titulação e ponto de equivalência", summary: "Entenda como uma solução pode revelar a concentração de outra.",
-        concept: "Na titulação, uma solução de concentração conhecida reage com a amostra. No ponto de equivalência, as quantidades de reagentes seguem a proporção da equação química balanceada.",
-        example: "Uma solução básica de concentração conhecida pode ser adicionada a uma amostra ácida até que um indicador mostre o ponto final.",
-        question: "Para que serve principalmente uma titulação?",
-        option_a: "Medir a massa de um sólido sem balança.", option_b: "Resfriar uma reação química.", option_c: "Determinar a concentração de uma amostra por reação.", option_d: "Separar líquidos por tamanho de partícula.",
-        correct_option: "c", explanation: "Na titulação, o volume de reagente padrão consumido permite calcular a concentração da amostra."
+        title: "Titulações e análise gravimétrica", summary: "Conheça dois caminhos clássicos para quantificar um analito.",
+        concept: "Na análise volumétrica por titulação, adiciona-se à amostra uma solução de concentração conhecida (titulante) até que a reação com o analito alcance a proporção estequiométrica prevista pela equação balanceada. O volume gasto ajuda a calcular a quantidade do analito.\n\nO ponto de equivalência é a condição estequiométrica da reação. O ponto final é o sinal observado no experimento, por exemplo a mudança de cor de um indicador, que deve ocorrer o mais próximo possível da equivalência.\n\nAs titulações podem explorar reações ácido-base, precipitação, complexação ou oxidação-redução. Na análise gravimétrica, a quantidade do analito é determinada a partir da massa de um produto de composição conhecida. Cada método exige condições e cuidados próprios.",
+        example: "Na análise de acidez de uma amostra, uma solução básica padronizada pode ser adicionada gradualmente. Relacionando o volume consumido à reação balanceada, calcula-se a quantidade de ácido.",
+        question: "O que permite calcular a quantidade de analito em uma titulação?",
+        option_a: "A cor do recipiente usado.", option_b: "A massa do titulante antes da reação, sem outras informações.", option_c: "O volume de titulante de concentração conhecida e a proporção da reação.", option_d: "A temperatura ambiente, independentemente da reação.",
+        correct_option: "c", explanation: "O cálculo combina a concentração e o volume do titulante com a estequiometria da reação."
+      },
+      {
+        title: "Planejamento do método analítico", summary: "Escolha uma abordagem que responda à pergunta sem comprometer a amostra.",
+        concept: "A escolha do método depende da pergunta analítica, da concentração esperada do analito, da exatidão necessária, da composição da amostra, do número de amostras e do tempo disponível.\n\nUma espécie majoritária pode ser medida por métodos clássicos, enquanto concentrações muito baixas podem exigir técnicas instrumentais mais sensíveis. Isso depende do analito e da matriz: não existe um método melhor para todos os problemas.\n\nInterferentes podem alterar o sinal ou a reação do analito; conhecer a composição aproximada da amostra ajuda a detectá-los e escolher como controlá-los. O método também deve evitar perda do analito, contaminação, danos à amostra e riscos desnecessários.",
+        example: "Para medir um contaminante em nível muito baixo numa fruta, o plano precisa considerar a matriz, a sensibilidade exigida, possíveis interferentes e o preparo que permita extrair o analito sem contaminá-lo.",
+        question: "Qual conjunto de informações ajuda a escolher um método de análise?",
+        option_a: "Somente a cor e o formato do recipiente.", option_b: "A concentração esperada, a matriz, os interferentes e a exatidão necessária.", option_c: "Apenas o nome comercial do reagente.", option_d: "Somente a ordem em que as amostras chegaram.",
+        correct_option: "b", explanation: "A escolha considera o nível do analito, a matriz e os objetivos de qualidade e execução da análise."
+      },
+      {
+        title: "Amostragem, matriz e analito", summary: "Obtenha uma porção representativa antes de iniciar as medidas.",
+        concept: "A amostra é a porção de material coletada para análise. A amostragem deve selecionar material representativo do lote ou população, para que o resultado descreva aquilo que se deseja investigar.\n\nA amostra bruta pode precisar de pré-tratamento e preparo até se tornar homogênea e adequada à análise. O analito é a espécie que interessa medir; a matriz é o conjunto das demais substâncias que compõem a amostra e podem influenciar a medida.\n\nAmostras complexas, como solos, alimentos e tecidos, podem ser heterogêneas, instáveis ou difíceis de dissolver. Dividir uma amostra mal homogeneizada não garante que cada alíquota represente o lote.",
+        example: "Para estimar a dureza de uma água, coleta-se uma amostra representativa, prepara-se o material conforme o método e determina-se cálcio e magnésio como analitos. Os demais componentes dissolvidos formam a matriz.",
+        question: "Em uma análise de cálcio na água, o que é a matriz?",
+        option_a: "O conjunto de substâncias da amostra além do analito de interesse.", option_b: "Apenas o instrumento usado para medir.", option_c: "O valor numérico final do resultado.", option_d: "O nome dado à etapa de titulação.",
+        correct_option: "a", explanation: "Matriz é o conjunto de substâncias que compõem a amostra; cálcio é o analito que se deseja medir."
+      },
+      {
+        title: "Preparo de soluções e diluição", summary: "Prepare uma concentração definida e calcule uma diluição.",
+        concept: "Para preparar uma solução a partir de um reagente puro, calcula-se e pesa-se a quantidade necessária, dissolve-se o soluto e ajusta-se o volume final em material volumétrico apropriado. A concentração depende do volume final, não apenas da quantidade de solvente inicialmente usada.\n\nAo diluir uma solução, transfere-se uma alíquota da solução concentrada e completa-se até o volume final desejado. Se não houver reação nem perda de soluto, a quantidade de matéria transferida se conserva: C₁V₁ = C₂V₂, usando unidades compatíveis.\n\nAlguns reagentes precisam ser padronizados para conhecer sua concentração real antes de serem usados em uma análise. Siga o procedimento de segurança do laboratório; ao diluir ácidos, adicione o ácido à água, nunca água ao ácido.",
+        example: "Para preparar 100 mL de solução 0,20 mol/L a partir de uma solução 1,0 mol/L, calcule V₁ = (0,20 × 100) / 1,0 = 20 mL. Transfira 20 mL da solução concentrada para um balão de 100 mL e complete até a marca.",
+        question: "Que volume de solução 1,0 mol/L é necessário para preparar 100 mL de solução 0,20 mol/L?",
+        option_a: "20 mL", option_b: "5 mL", option_c: "80 mL", option_d: "200 mL",
+        correct_option: "a", explanation: "Pela relação C₁V₁ = C₂V₂, V₁ = (0,20 × 100 mL) / 1,0 = 20 mL."
+      },
+      {
+        title: "Réplicas, incerteza e resultados", summary: "Avalie a qualidade dos dados e comunique o resultado com clareza.",
+        concept: "Analisar alíquotas replicadas ajuda a observar a variação das medidas e avaliar a incerteza. As variáveis do método e os interferentes precisam ser controlados para não comprometer o resultado.\n\nTratamento estatístico e comparação com padrões analíticos certificados podem apoiar a avaliação dos dados, conforme o método. Réplicas ajudam a revelar dispersão, mas não corrigem sozinhas um erro sistemático compartilhado, como um instrumento mal calibrado.\n\nO resultado deve trazer unidades e base de concentração claras. Uma medida química pode embasar decisões de saúde, ambiente e controle de qualidade; por isso, cada etapa, desde a amostragem até a apresentação, importa.",
+        example: "Se três alíquotas da mesma amostra dão resultados diferentes, a dispersão alerta para a incerteza. Antes de relatar um valor, verifique o método, a calibração, as unidades e possíveis interferências.",
+        question: "Qual é uma utilidade de analisar alíquotas replicadas?",
+        option_a: "Garantir que qualquer interferente desapareça.", option_b: "Substituir a calibração do instrumento.", option_c: "Eliminar automaticamente todo erro sistemático.", option_d: "Avaliar a variação entre medidas e a incerteza do resultado.",
+        correct_option: "d", explanation: "Réplicas permitem avaliar a dispersão, mas não eliminam automaticamente vieses sistemáticos."
+      },
+      {
+        lesson_type: "assessment",
+        title: "Teste final: fundamentos da Química Analítica", summary: "Dez questões para revisar os conceitos desta trilha.",
+        concept: "Este teste reúne os conceitos das aulas de Química Analítica. Leia cada questão com atenção às unidades, às condições da amostra e ao objetivo da medida. Para concluir a trilha, acerte pelo menos 70% das questões.",
+        example: "Você pode consultar as explicações das aulas antes de começar. Se não alcançar a pontuação mínima, revise os comentários das questões e tente novamente.",
+        question: "Responda às dez questões abaixo.",
+        option_a: "Respostas disponíveis nas questões do teste.", option_b: "Respostas disponíveis nas questões do teste.",
+        option_c: "Respostas disponíveis nas questões do teste.", option_d: "Respostas disponíveis nas questões do teste.",
+        correct_option: "a", explanation: "Cada questão apresenta suas próprias alternativas e explicação.",
+        quiz_questions: [
+          {
+            question: "Qual alternativa descreve uma pergunta quantitativa?",
+            option_a: "Quais espécies estão presentes na amostra?", option_b: "Qual é a concentração de cálcio na água?", option_c: "A amostra contém cloreto?", option_d: "Quais substâncias compõem o sólido?",
+            correct_option: "b", explanation: "Uma concentração expressa a quantidade de uma espécie, por isso responde a uma pergunta quantitativa."
+          },
+          {
+            question: "Ao selecionar um método, qual conjunto de fatores deve ser considerado?",
+            option_a: "Somente a cor do recipiente e a ordem de chegada.", option_b: "Apenas o preço do reagente.", option_c: "Concentração esperada, matriz, interferentes e exatidão necessária.", option_d: "Somente o nome da substância analisada.",
+            correct_option: "c", explanation: "O método precisa atender à faixa de concentração e ao objetivo, considerando a composição e os interferentes da amostra."
+          },
+          {
+            question: "Por que é importante que a amostra coletada represente o lote?",
+            option_a: "Para que o resultado descreva adequadamente o material que se deseja investigar.", option_b: "Para dispensar o preparo da amostra em qualquer caso.", option_c: "Para assegurar que a matriz contenha apenas o analito.", option_d: "Para que todas as amostras tenham a mesma cor.",
+            correct_option: "a", explanation: "Sem uma amostragem representativa, uma medida correta pode não descrever o lote ou a população de interesse."
+          },
+          {
+            question: "Uma amostra contém 2,70 g de NaCl em 100 mL de solução. Usando massa molar 58,44 g/mol, qual é a concentração aproximada?",
+            option_a: "0,0462 mol/L", option_b: "0,462 mol/L", option_c: "4,62 mol/L", option_d: "46,2 mol/L",
+            correct_option: "b", explanation: "2,70 / 58,44 = 0,0462 mol em 0,100 L; logo, c = 0,462 mol/L."
+          },
+          {
+            question: "Uma solução 4% (m/v) contém:",
+            option_a: "4 g de soluto em 100 g de solução.", option_b: "4 mol de soluto em 100 mL de solução.", option_c: "4 mL de soluto em 100 g de solução.", option_d: "4 g de soluto em 100 mL de solução.",
+            correct_option: "d", explanation: "Porcentagem massa/volume expressa gramas de soluto por 100 mL de solução."
+          },
+          {
+            question: "O que expressa a normalidade de uma solução?",
+            option_a: "A massa total da amostra em gramas.", option_b: "O volume de solvente em mililitros.", option_c: "A quantidade de equivalentes por litro, dependente da reação considerada.", option_d: "O número de átomos por molécula, sem relação com a reação.",
+            correct_option: "c", explanation: "Normalidade é expressa em equivalentes por litro; o equivalente depende da reação, que deve ser especificada."
+          },
+          {
+            question: "Que volume de uma solução 1,0 mol/L é necessário para preparar 100 mL de solução 0,20 mol/L?",
+            option_a: "20 mL", option_b: "5 mL", option_c: "80 mL", option_d: "200 mL",
+            correct_option: "a", explanation: "C₁V₁ = C₂V₂; portanto, V₁ = (0,20 × 100) / 1,0 = 20 mL."
+          },
+          {
+            question: "O ponto de equivalência de uma titulação é:",
+            option_a: "O instante em que o recipiente fica cheio.", option_b: "A condição em que os reagentes estão na proporção estequiométrica da reação.", option_c: "Sempre o momento em que a solução muda de cor, independentemente da reação.", option_d: "O volume inicial da amostra.",
+            correct_option: "b", explanation: "A equivalência é definida pela estequiometria; a mudança observada do indicador é o ponto final e deve se aproximar dela."
+          },
+          {
+            question: "O que as medidas replicadas ajudam a avaliar?",
+            option_a: "A identidade do recipiente usado.", option_b: "A eliminação automática de interferentes.", option_c: "A correção de qualquer erro sistemático.", option_d: "A dispersão das medidas e a incerteza.",
+            correct_option: "d", explanation: "Réplicas ajudam a observar a variação aleatória, mas não eliminam um viés sistemático comum."
+          },
+          {
+            question: "Em água muito diluída, assumindo densidade próxima de 1 kg/L, 5 mg/L corresponde aproximadamente a:",
+            option_a: "5% (m/m).", option_b: "5 ppb (m/m).", option_c: "5 ppm (m/m).", option_d: "5 mol/L.",
+            correct_option: "c", explanation: "Um litro de água tem aproximadamente 1 kg; assim, 5 mg por litro equivalem aproximadamente a 5 mg/kg, ou 5 ppm em massa."
+          }
+        ]
       }
     ]
   },
@@ -187,7 +281,19 @@ catalog.each_with_index do |subject_data, subject_index|
   subject.update!(subject_data.merge(position: subject_index + 1))
 
   lessons_data.each_with_index do |lesson_data, lesson_index|
+    lesson_data = lesson_data.dup
+    lesson_type = lesson_data.delete(:lesson_type) || "lesson"
+    quiz_questions_data = lesson_data.delete(:quiz_questions)
     lesson = subject.lessons.find_or_initialize_by(title: lesson_data[:title])
-    lesson.update!(lesson_data.merge(position: lesson_index + 1, xp: 10))
+    lesson.update!(lesson_data.merge(lesson_type: "lesson", position: lesson_index + 1, xp: lesson_type == "assessment" ? 20 : 10))
+
+    next unless lesson_type == "assessment"
+
+    quiz_questions_data.each_with_index do |question_data, question_index|
+      question = lesson.quiz_questions.find_or_initialize_by(position: question_index + 1)
+      question.update!(question_data.merge(position: question_index + 1))
+    end
+    lesson.quiz_questions.where.not(position: 1..quiz_questions_data.length).destroy_all
+    lesson.update!(lesson_type: lesson_type)
   end
 end
