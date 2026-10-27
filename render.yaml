@@ -7,7 +7,7 @@ services:
     branch: main
     dockerfilePath: ./Dockerfile
     dockerContext: .
-    dockerCommand: /bin/sh -c "./bin/rails db:prepare && exec ./bin/rails server"
+    dockerCommand: ./bin/render-entrypoint
     healthCheckPath: /up
     autoDeployTrigger: commit
     envVars:
