@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: quimica-educativa
+    runtime: docker
+    plan: free
+    region: ohio
+    branch: main
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    dockerCommand: ./bin/rails server
+    healthCheckPath: /up
+    autoDeployTrigger: commit
+    envVars:
+      - key: SECRET_KEY_BASE
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: "1"
+      - key: RAILS_MAX_THREADS
+        value: "3"

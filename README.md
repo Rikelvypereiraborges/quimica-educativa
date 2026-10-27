@@ -36,6 +36,17 @@ Abra `http://localhost:3000`. Os dados das aulas são definidos em `db/seeds.rb`
 bundle exec rails db:seed
 ```
 
+## Publicar no Render
+
+Este é um aplicativo Rails dinâmico: GitHub Pages não executa o servidor Rails nem seu banco. O arquivo `render.yaml` configura o aplicativo para o Render usando o `Dockerfile` da aplicação. O banco SQLite contém apenas o catálogo de aulas e é preparado automaticamente ao iniciar; o progresso individual fica salvo na sessão do navegador.
+
+1. Acesse o [Render Blueprint](https://dashboard.render.com/blueprints) e entre ou crie sua conta.
+2. Crie um Blueprint e conecte o repositório `Rikelvypereiraborges/quimica-educativa`, na branch `main`.
+3. Revise e implante o serviço gratuito descrito em `render.yaml`.
+4. Após o deploy terminar, abra o endereço `.onrender.com` exibido no painel do Render.
+
+O Render gratuito suspende o serviço após 15 minutos sem acessos; a primeira visita após a suspensão pode levar cerca de um minuto para carregar. O plano gratuito é para testes e projetos pessoais. Consulte as [limitações do Render gratuito](https://render.com/docs/free).
+
 ## Testes
 
 ```powershell
