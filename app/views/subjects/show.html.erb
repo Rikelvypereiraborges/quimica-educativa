@@ -1,0 +1,29 @@
+<main class="inner-page">
+  <div class="breadcrumb"><%= link_to "Início", root_path %><span>/</span><span>Trilhas</span><span>/</span><strong><%= @subject.name %></strong></div>
+
+  <section class="subject-hero" style="--subject-color: <%= @subject.color %>">
+    <div>
+      <p class="eyebrow">TRILHA <%= @subject.position.to_s.rjust(2, "0") %> · FUNDAMENTOS</p>
+      <h1><%= @subject.name %></h1>
+      <p><%= @subject.description %></p>
+      <div class="subject-meta"><span><%= @subject.lessons.size %> aulas introdutórias</span><span>·</span><span>Aprenda no seu ritmo</span></div>
+    </div>
+    <span class="subject-hero-icon" aria-hidden="true"><%= @subject.icon %></span>
+  </section>
+
+  <section class="lesson-list-section">
+    <div class="lesson-list-heading"><div><p class="eyebrow">SUA JORNADA</p><h2>Comece pelo <span>começo.</span></h2></div><span class="lesson-total"><%= @subject.lessons.size %> aulas</span></div>
+    <div class="lesson-list">
+      <% @subject.lessons.each_with_index do |lesson, index| %>
+        <% completed = @completed_lesson_ids.include?(lesson.id.to_s) %>
+        <%= link_to lesson_path(subject_slug: @subject.slug, id: lesson.id), class: "lesson-row" do %>
+          <span class="lesson-number <%= "is-complete" if completed %>"><%= completed ? "✓" : index.to_s.rjust(2, "0") %></span>
+          <span class="lesson-row-copy"><strong><%= lesson.title %></strong><small><%= lesson.summary %></small></span>
+          <span class="lesson-xp">✦ <%= lesson.xp %> XP</span>
+          <span class="lesson-row-arrow" aria-hidden="true">→</span>
+        <% end %>
+      <% end %>
+    </div>
+    <%= link_to "← Ver todas as trilhas", root_path(anchor: "trilhas"), class: "back-link" %>
+  </section>
+</main>

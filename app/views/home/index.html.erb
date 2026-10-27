@@ -1,0 +1,81 @@
+<main>
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow"><span class="eyebrow-dot"></span> SEU LABORATÓRIO DE APRENDIZADO</p>
+        <h1>Química que faz<br>sentido <span>na prática.</span></h1>
+        <p class="hero-description">Aprenda desde os fundamentos até a rotina do laboratório, no seu ritmo e com exercícios que ajudam o conhecimento a ficar.</p>
+        <div class="hero-actions">
+          <%= link_to root_path(anchor: "trilhas"), class: "button button-primary" do %>
+            Explorar as trilhas <span aria-hidden="true">→</span>
+          <% end %>
+          <span class="hero-note">Gratuito para começar. No seu tempo.</span>
+        </div>
+        <div class="hero-proof">
+          <div class="avatar-stack" aria-hidden="true"><span>Q</span><span>+</span><span>∞</span></div>
+          <p>Uma base sólida para <strong>ir mais longe.</strong></p>
+        </div>
+      </div>
+
+      <div class="hero-art" aria-label="Ilustração de uma experiência química">
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <span class="molecule molecule-one"></span>
+        <span class="molecule molecule-two"></span>
+        <span class="molecule molecule-three"></span>
+        <div class="flask">
+          <div class="flask-neck"></div>
+          <div class="flask-body"><div class="flask-liquid"></div><span class="bubble bubble-one"></span><span class="bubble bubble-two"></span><span class="bubble bubble-three"></span></div>
+        </div>
+        <div class="floating-note"><span class="note-check">✓</span><span><strong>Aprender fazendo</strong><small>Um conceito de cada vez</small></span></div>
+        <span class="art-caption">CURIOSIDADE EM MOVIMENTO</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="learning-strip" aria-label="Seu progresso">
+    <div class="learning-strip-inner">
+      <div class="strip-intro"><span class="strip-sparkle">✳</span><span>Seu aprendizado,<br><strong>um passo de cada vez.</strong></span></div>
+      <div class="strip-stat"><strong><%= @subjects.size %></strong><span>trilhas essenciais</span></div>
+      <div class="strip-stat"><strong><%= @lesson_count %></strong><span>aulas para explorar</span></div>
+      <div class="strip-stat"><strong><%= @completed_lessons_count %></strong><span><%= @completed_lessons_count == 1 ? "aula concluída" : "aulas concluídas" %></span></div>
+      <div class="strip-xp"><span class="xp-icon">✦</span><span><strong><%= @earned_xp %> XP</strong><small>conquistados</small></span></div>
+    </div>
+  </section>
+
+  <section class="tracks-section section-wrap" id="trilhas">
+    <div class="section-heading">
+      <div><p class="eyebrow">ESCOLHA POR ONDE COMEÇAR</p><h2>Conhecimento para <span>cada etapa.</span></h2></div>
+      <p>Do primeiro conceito à aplicação no laboratório — construa sua base e avance com confiança.</p>
+    </div>
+
+    <div class="subject-grid">
+      <% @subjects.each do |subject| %>
+        <%= link_to subject_path(subject.slug), class: "subject-card", style: "--subject-color: #{subject.color}" do %>
+          <div class="card-topline"><span class="subject-icon"><%= subject.icon %></span><span class="card-arrow" aria-hidden="true">↗</span></div>
+          <p class="card-kicker">TRILHA <%= subject.position.to_s.rjust(2, "0") %></p>
+          <h3><%= subject.name %></h3>
+          <p class="card-description"><%= subject.description %></p>
+          <span class="card-footer"><%= subject.lessons.size %> aulas introdutórias <span aria-hidden="true">→</span></span>
+        <% end %>
+      <% end %>
+    </div>
+  </section>
+
+  <section class="method-section" id="como-funciona">
+    <div class="method-inner">
+      <div class="method-heading"><p class="eyebrow">SIMPLES ASSIM</p><h2>Aprender também<br>pode ser <span>leve.</span></h2><p>Sem decoreba sem contexto. Cada etapa combina explicação, aplicação e prática.</p></div>
+      <div class="method-steps">
+        <article class="method-step"><span class="step-number">01</span><div><h3>Entenda a ideia</h3><p>Conceitos explicados com clareza, direto ao ponto e sem pré-requisitos.</p></div><span class="step-symbol">◌</span></article>
+        <article class="method-step"><span class="step-number">02</span><div><h3>Veja na prática</h3><p>Exemplos que conectam a teoria ao cotidiano e ao laboratório.</p></div><span class="step-symbol">⌁</span></article>
+        <article class="method-step"><span class="step-number">03</span><div><h3>Teste o que aprendeu</h3><p>Exercícios rápidos com feedback para aprender até com os erros.</p></div><span class="step-symbol">✓</span></article>
+      </div>
+    </div>
+  </section>
+
+  <section class="closing-cta">
+    <p class="eyebrow">TODA GRANDE DESCOBERTA COMEÇA COM UMA PERGUNTA</p>
+    <h2>Qual vai ser seu <span>primeiro passo?</span></h2>
+    <%= link_to "Escolher minha trilha →", root_path(anchor: "trilhas"), class: "button button-light" %>
+  </section>
+</main>

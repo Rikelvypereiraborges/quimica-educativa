@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Quimica | Aprenda praticando" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#f5f5ef">
+    <meta name="description" content="Aprenda química com aulas curtas, exemplos de laboratório e exercícios práticos.">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="T I Com Quimica">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app %>
+  </head>
+
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <%= link_to root_path, class: "brand", aria: { label: "Quimica, página inicial" } do %>
+          <span class="brand-mark">q.</span>
+          <span>quimica<span class="brand-dot">.</span></span>
+        <% end %>
+        <nav class="main-nav" aria-label="Navegação principal">
+          <%= link_to "Trilhas", root_path(anchor: "trilhas") %>
+          <%= link_to "Como funciona", root_path(anchor: "como-funciona") %>
+        </nav>
+        <%= link_to "Começar a estudar", root_path(anchor: "trilhas"), class: "header-cta" %>
+      </div>
+    </header>
+    <%= yield %>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <%= link_to root_path, class: "brand footer-brand" do %>
+          <span class="brand-mark">q.</span><span>quimica<span class="brand-dot">.</span></span>
+        <% end %>
+        <p>Aprender química também é experimentar, errar e descobrir.</p>
+        <span>Feito para quem transforma curiosidade em conhecimento.</span>
+      </div>
+    </footer>
+  </body>
+</html>

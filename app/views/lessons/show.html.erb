@@ -1,0 +1,44 @@
+<main class="inner-page lesson-page">
+  <div class="breadcrumb"><%= link_to "Início", root_path %><span>/</span><%= link_to @subject.name, subject_path(@subject.slug) %><span>/</span><strong><%= @lesson.title %></strong></div>
+
+  <div class="lesson-layout">
+    <article class="lesson-content">
+      <p class="eyebrow">TRILHA <%= @subject.position.to_s.rjust(2, "0") %> · AULA <%= @lesson.position.to_s.rjust(2, "0") %></p>
+      <h1><%= @lesson.title %></h1>
+      <p class="lesson-lead"><%= @lesson.summary %></p>
+
+      <div class="concept-card"><span class="concept-label">A IDEIA PRINCIPAL</span><p><%= @lesson.concept %></p></div>
+
+      <section class="example-card"><span class="example-icon">✳</span><div><span class="concept-label">NA PRÁTICA</span><p><%= @lesson.example %></p></div></section>
+
+      <section class="exercise-card" id="exercicio">
+        <div class="exercise-heading"><div><p class="eyebrow">HORA DE PRATICAR</p><h2>Você <span>consegue?</span></h2></div><span class="exercise-xp">✦ +<%= @lesson.xp %> XP</span></div>
+        <p class="exercise-question"><%= @lesson.question %></p>
+        <%= form_with url: answer_lesson_path(subject_slug: @subject.slug, id: @lesson.id), method: :post, class: "answer-form" do %>
+          <div class="answer-options">
+            <% @lesson.answer_options.each do |key, answer| %>
+              <label class="answer-option" for="answer_<%= key %>">
+                <%= radio_button_tag :answer, key, false, id: "answer_#{key}", required: true %>
+                <span class="answer-letter"><%= key.upcase %></span>
+                <span class="answer-copy"><%= answer %></span>
+              </label>
+            <% end %>
+          </div>
+          <button type="submit" class="button button-primary answer-submit">Conferir resposta <span aria-hidden="true">→</span></button>
+        <% end %>
+        <% if flash[:notice] %><div class="quiz-feedback feedback-correct" role="status"><span>✓</span><p><%= flash[:notice] %></p></div><% end %>
+        <% if flash[:alert] %><div class="quiz-feedback feedback-retry" role="alert"><span>↻</span><p><%= flash[:alert] %></p></div><% end %>
+        <% if @completed %><p class="completed-note">✓ Aula concluída — você já conquistou os pontos desta aula.</p><% end %>
+      </section>
+
+      <div class="lesson-navigation">
+        <%= link_to "← Todas as aulas", subject_path(@subject.slug), class: "back-link" %>
+        <%= link_to "Próxima trilha →", root_path(anchor: "trilhas"), class: "back-link" %>
+      </div>
+    </article>
+    <aside class="lesson-aside">
+      <div class="aside-card"><span class="aside-icon"><%= @subject.icon %></span><p class="eyebrow">SUA TRILHA</p><h2><%= @subject.name %></h2><%= link_to "Ver todas as aulas →", subject_path(@subject.slug), class: "aside-link" %></div>
+      <div class="aside-tip"><span>✦ DICA</span><p>Errou? Tudo bem. Leia a explicação e tente de novo. É assim que o aprendizado acontece.</p></div>
+    </aside>
+  </div>
+</main>
