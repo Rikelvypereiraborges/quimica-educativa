@@ -3,7 +3,7 @@
 
   <div class="lesson-layout">
     <article class="lesson-content">
-      <p class="eyebrow">TRILHA <%= @subject.position.to_s.rjust(2, "0") %> · <%= @lesson.assessment? ? "AVALIAÇÃO FINAL" : "AULA #{@lesson.position.to_s.rjust(2, "0")}" %></p>
+      <p class="eyebrow">TRILHA <%= @subject.position.to_s.rjust(2, "0") %> · <%= @lesson.assessment? ? "AVALIAÇÃO FINAL" : "MÓDULO #{@lesson.position.to_s.rjust(2, "0")} · #{@lesson.difficulty_label.upcase}" %></p>
       <h1><%= @lesson.title %></h1>
       <p class="lesson-lead"><%= @lesson.summary %></p>
 
@@ -13,33 +13,29 @@
 
       <section class="exercise-card" id="exercicio">
         <div class="exercise-heading"><div><p class="eyebrow"><%= @lesson.assessment? ? "REVISÃO DO CONTEÚDO" : "HORA DE PRATICAR" %></p><h2><%= @lesson.assessment? ? "Teste " : "Você " %><span><%= @lesson.assessment? ? "final" : "consegue?" %></span></h2></div><span class="exercise-xp">✦ +<%= @lesson.xp %> XP</span></div>
-        <% if @lesson.assessment? %>
-          <p class="exercise-question assessment-instructions">Responda às <%= @assessment_questions.size %> questões. Você precisa acertar pelo menos <%= @assessment_passing_score %> para concluir a trilha e ganhar XP.</p>
-          <% if @assessment_questions.any? %>
-            <%= form_with url: answer_lesson_path(subject_slug: @subject.slug, id: @lesson.id), method: :post, class: "answer-form" do %>
-              <% @assessment_questions.each_with_index do |question, index| %>
-                <fieldset class="assessment-question">
-                  <legend><span class="assessment-question-number">Questão <%= index + 1 %></span><%= question.question %></legend>
-                  <div class="answer-options">
-                    <% question.answer_options.each do |key, answer| %>
-                      <% input_id = "answer_#{question.id}_#{key}" %>
-                      <label class="answer-option" for="<%= input_id %>">
-                        <%= radio_button_tag "answers[#{question.id}]", key, @assessment_feedback&.dig("answers", question.id.to_s) == key, id: input_id, required: true %>
-                        <span class="answer-letter"><%= key.upcase %></span>
-                        <span class="answer-copy"><%= answer %></span>
-                      </label>
-                    <% end %>
-                  </div>
-                  <% if @assessment_feedback %>
-                    <% correct = @assessment_feedback.dig("answers", question.id.to_s) == question.correct_option %>
-                    <p class="assessment-question-feedback <%= correct ? "is-correct" : "needs-review" %>"><%= correct ? "Resposta correta." : "Revise: #{question.explanation}" %></p>
+        <% if @quiz_questions.any? %>
+          <p class="exercise-question assessment-instructions">Responda às <%= @quiz_questions.size %> questões deste <%= @lesson.assessment? ? "teste da trilha" : "módulo" %>. Você precisa acertar pelo menos <%= @assessment_passing_score %> para concluir e ganhar XP.</p>
+          <%= form_with url: answer_lesson_path(subject_slug: @subject.slug, id: @lesson.id), method: :post, class: "answer-form" do %>
+            <% @quiz_questions.each_with_index do |question, index| %>
+              <fieldset class="assessment-question">
+                <legend><span class="assessment-question-number">Questão <%= index + 1 %></span><%= question.question %></legend>
+                <div class="answer-options">
+                  <% question.answer_options.each do |key, answer| %>
+                    <% input_id = "answer_#{question.id}_#{key}" %>
+                    <label class="answer-option" for="<%= input_id %>">
+                      <%= radio_button_tag "answers[#{question.id}]", key, @assessment_feedback&.dig("answers", question.id.to_s) == key, id: input_id, required: true %>
+                      <span class="answer-letter"><%= key.upcase %></span>
+                      <span class="answer-copy"><%= answer %></span>
+                    </label>
                   <% end %>
-                </fieldset>
-              <% end %>
-              <button type="submit" class="button button-primary answer-submit">Enviar teste <span aria-hidden="true">→</span></button>
+                </div>
+                <% if @assessment_feedback %>
+                  <% correct = @assessment_feedback.dig("answers", question.id.to_s) == question.correct_option %>
+                  <p class="assessment-question-feedback <%= correct ? "is-correct" : "needs-review" %>"><%= correct ? "Resposta correta." : "Revise: #{question.explanation}" %></p>
+                <% end %>
+              </fieldset>
             <% end %>
-          <% else %>
-            <div class="quiz-feedback feedback-retry" role="alert"><span>!</span><p>Este teste ainda não tem questões disponíveis. Tente novamente mais tarde.</p></div>
+            <button type="submit" class="button button-primary answer-submit"><%= @lesson.assessment? ? "Enviar teste" : "Enviar respostas" %> <span aria-hidden="true">→</span></button>
           <% end %>
         <% else %>
           <p class="exercise-question"><%= @lesson.question %></p>
@@ -58,7 +54,7 @@
         <% end %>
         <% if flash[:notice] %><div class="quiz-feedback feedback-correct" role="status"><span>✓</span><p><%= flash[:notice] %></p></div><% end %>
         <% if flash[:alert] %><div class="quiz-feedback feedback-retry" role="alert"><span>↻</span><p><%= flash[:alert] %></p></div><% end %>
-        <% if @completed %><p class="completed-note">✓ Aula concluída — você já conquistou os pontos desta aula.</p><% end %>
+        <% if @completed %><p class="completed-note">✓ Etapa concluída — você já conquistou os pontos desta etapa.</p><% end %>
       </section>
 
       <div class="lesson-navigation">

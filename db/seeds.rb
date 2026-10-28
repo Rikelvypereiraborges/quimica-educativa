@@ -1,3 +1,10 @@
+require_relative "seed_assessments"
+require_relative "seed_curriculum"
+require_relative "seed_expanded_foundations"
+require_relative "seed_expanded_processes"
+require_relative "seed_expanded_professional"
+require_relative "seed_module_questions"
+
 catalog = [
   {
     name: "Química Analítica", slug: "quimica-analitica", icon: "AN", color: "#c5e1cc",
@@ -121,11 +128,11 @@ catalog = [
           }
         ]
       }
-    ]
+    ] + SeedCurriculum::ANALYTICAL_LESSONS
   },
   {
-    name: "Química Orgânica", slug: "quimica-organica", icon: "OR", color: "#f0d7ac",
-    description: "Explore as moléculas de carbono que fazem parte da vida.",
+    name: "Química Orgânica I", slug: "quimica-organica", icon: "OR", color: "#f0d7ac",
+    description: "Construa a base para compreender estruturas, funções e reações orgânicas.",
     lessons: [
       {
         title: "O carbono e suas ligações", summary: "Por que o carbono está no centro da química orgânica?",
@@ -275,6 +282,14 @@ catalog = [
   }
 ]
 
+catalog.concat(
+  SeedCurriculum::SUBJECTS.reject { |subject| SeedCurriculum::EXISTING_SUBJECT_SLUGS.include?(subject[:slug]) }
+    .map(&:deep_dup)
+)
+
+expanded_lessons = SeedExpansionFoundations::LESSONS
+  .merge(SeedExpansionProcesses::LESSONS)
+  .merge(SeedExpansionProfessional::LESSONS)
 previous_analytic_titles = {
   "Análise qualitativa e quantitativa" => "Qualitativa e quantitativa",
   "Concentração e unidades" => "Concentração comum",
@@ -283,28 +298,95 @@ previous_analytic_titles = {
 
 catalog.each_with_index do |subject_data, subject_index|
   lessons_data = subject_data.delete(:lessons)
+  lessons_data.concat(expanded_lessons.fetch(subject_data[:slug], []).map(&:deep_dup))
   subject = Subject.find_or_initialize_by(slug: subject_data[:slug])
   subject.update!(subject_data.merge(position: subject_index + 1))
 
-  lessons_data.each_with_index do |lesson_data, lesson_index|
+  lesson_position = 0
+  lessons_data.each do |lesson_data|
     lesson_data = lesson_data.dup
     lesson_type = lesson_data.delete(:lesson_type) || "lesson"
     quiz_questions_data = lesson_data.delete(:quiz_questions)
+    lesson_data.merge!(SeedCurriculum::DETAILED_LESSONS[lesson_data[:title]] || {})
     previous_title = previous_analytic_titles[lesson_data[:title]] if subject.slug == "quimica-analitica"
     lesson = subject.lessons.find_by(title: previous_title) if previous_title
     lesson ||= subject.lessons.find_or_initialize_by(title: lesson_data[:title])
     if previous_title && lesson.persisted?
       subject.lessons.where(title: lesson_data[:title]).where.not(id: lesson.id).destroy_all
     end
-    lesson.update!(lesson_data.merge(lesson_type: "lesson", position: lesson_index + 1, xp: lesson_type == "assessment" ? 20 : 10))
+    if lesson_type == "assessment"
+      lesson.update!(lesson_data.merge(lesson_type: "lesson", position: lesson_position + 1, xp: 20))
+      quiz_questions_data.each_with_index do |question_data, question_index|
+        question = lesson.quiz_questions.find_or_initialize_by(position: question_index + 1)
+        question.update!(question_data.merge(position: question_index + 1))
+      end
+      lesson.quiz_questions.where.not(position: 1..quiz_questions_data.length).destroy_all
+      lesson.update!(lesson_type: lesson_type)
+      next
+    end
 
-    next unless lesson_type == "assessment"
+    lesson_position += 1
+    lesson_data[:difficulty_level] ||= SeedCurriculum::BASE_LEVELS.fetch(subject.slug, [])[lesson_position - 1] || "iniciante"
+    lesson.update!(lesson_data.merge(lesson_type: "lesson", position: lesson_position, xp: 10))
+
+    module_question = lesson_data.slice(:question, :option_a, :option_b, :option_c, :option_d, :correct_option, :explanation)
+    quiz_questions_data = if quiz_questions_data.present?
+      [ module_question ] + quiz_questions_data
+    else
+      [ module_question ] + SeedModuleQuestions::QUESTIONS.fetch(lesson_data[:title])
+    end
 
     quiz_questions_data.each_with_index do |question_data, question_index|
       question = lesson.quiz_questions.find_or_initialize_by(position: question_index + 1)
       question.update!(question_data.merge(position: question_index + 1))
     end
     lesson.quiz_questions.where.not(position: 1..quiz_questions_data.length).destroy_all
-    lesson.update!(lesson_type: lesson_type)
   end
+end
+
+catalog.each do |subject_data|
+  subject = Subject.find_by!(slug: subject_data[:slug])
+  assessment_data = SeedAssessments::ASSESSMENTS[subject.slug]
+  unless assessment_data
+    questions = subject.lessons.where(lesson_type: "lesson").includes(:quiz_questions).flat_map do |lesson|
+      lesson.quiz_questions.first(5).map do |question|
+        question.attributes.symbolize_keys.slice(
+          :question, :option_a, :option_b, :option_c, :option_d, :correct_option, :explanation
+        )
+      end
+    end.first(10)
+    assessment_data = {
+      title: "Avaliação final: #{subject.name}",
+      summary: "Dez questões para aplicar os conceitos desta trilha.",
+      concept: "Resolva as questões aplicando os conceitos e exemplos estudados nos módulos. Para concluir a trilha, acerte pelo menos 70% das questões.",
+      example: "Leia cada enunciado com atenção, confira as unidades e revise os comentários após enviar as respostas.",
+      questions: questions
+    }
+  end
+  assessment = subject.lessons.find_or_initialize_by(title: assessment_data[:title])
+  lesson_count = subject.lessons.where(lesson_type: "lesson").maximum(:position).to_i
+  assessment.update!(
+    title: assessment_data[:title],
+    summary: assessment_data[:summary],
+    concept: assessment_data[:concept],
+    example: assessment_data[:example],
+    question: "Responda às dez questões abaixo.",
+    option_a: "Respostas disponíveis nas questões do teste.",
+    option_b: "Respostas disponíveis nas questões do teste.",
+    option_c: "Respostas disponíveis nas questões do teste.",
+    option_d: "Respostas disponíveis nas questões do teste.",
+    correct_option: "a",
+    explanation: "Cada questão apresenta suas próprias alternativas e explicação.",
+    lesson_type: "lesson",
+    position: lesson_count + 1,
+    xp: 20
+  )
+
+  assessment_data[:questions].each_with_index do |question_data, question_index|
+    question = assessment.quiz_questions.find_or_initialize_by(position: question_index + 1)
+    question.update!(question_data.merge(position: question_index + 1))
+  end
+  assessment.quiz_questions.where.not(position: 1..assessment_data[:questions].length).destroy_all
+  assessment.quiz_questions.reload
+  assessment.update!(lesson_type: "assessment")
 end

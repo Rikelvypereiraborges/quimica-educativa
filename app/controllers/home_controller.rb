@@ -4,7 +4,7 @@ class HomeController < ApplicationController
     completed_lessons = Lesson.where(id: completed_lesson_ids)
     @completed_lessons_count = completed_lessons.count
     @earned_xp = completed_lessons.sum(:xp)
-    @lesson_count = Lesson.count
+    @lesson_count = Lesson.where(lesson_type: "lesson").count
   end
 
   private

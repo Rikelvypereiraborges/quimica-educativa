@@ -61,6 +61,90 @@ class LearningFlowTest < ActionDispatch::IntegrationTest
     assert_select ".assessment-instructions", /pelo menos 7/
   end
 
+  test "seeded learning tracks have ten questions in each module and final assessment" do
+    Rails.application.load_seed
+
+    tracks = Subject.includes(lessons: :quiz_questions).map do |subject|
+      {
+        subject: subject,
+        modules: subject.lessons.reject(&:assessment?),
+        assessment: subject.lessons.find(&:assessment?)
+      }
+    end
+
+    assert_equal 19, tracks.length
+    assert tracks.all? { |track| track[:assessment]&.quiz_questions&.length == 10 }
+    assert_equal 106, tracks.sum { |track| track[:modules].length }
+    assert tracks.all? { |track| track[:modules].all? { |lesson| lesson.quiz_questions.length == 10 } }
+    assert tracks.all? { |track| track[:modules].map(&:difficulty_level).uniq.sort == Lesson::DIFFICULTY_LEVELS.keys.sort }
+    assert tracks.all? { |track|
+      track[:modules].map(&:position) == (1..track[:modules].length).to_a &&
+        track[:assessment].position == track[:modules].length + 1
+    }
+    non_analytic_tracks = tracks.reject { |track| track[:subject].slug == "quimica-analitica" }
+    assert(non_analytic_tracks.all? do |track|
+      track[:modules].count { |lesson| lesson.position > SeedCurriculum::BASE_LEVELS.fetch(track[:subject].slug).length } == 3
+    end)
+    assert_includes Subject.pluck(:slug), "analise-instrumental"
+    assert_includes Subject.pluck(:slug), "quimica-organica-ii"
+    assert_includes Subject.pluck(:slug), "utilidades-efluentes"
+    assert_equal 11, Subject.find_by!(slug: "quimica-analitica").lessons.where(lesson_type: "lesson").count
+    assert_includes Subject.pluck(:slug), "estagio-curricular-tcc"
+
+    module_lesson = tracks.first[:modules].first
+    get lesson_path(subject_slug: module_lesson.subject.slug, id: module_lesson.id)
+
+    assert_response :success
+    assert_select ".eyebrow", /INICIANTE|INTERMEDIÁRIO|DIFÍCIL|PROFISSIONAL/
+    assert_select ".assessment-question", 10
+    assert_select ".assessment-instructions", /questões deste módulo/
+
+    get subject_path("quimica-organica")
+    assert_response :success
+    assert_select ".lesson-level-heading h3", text: "Iniciante"
+    assert_select ".lesson-level-heading h3", text: "Intermediário"
+    assert_select ".lesson-level-heading h3", text: "Difícil"
+    assert_select ".lesson-level-heading h3", text: "Profissional"
+  end
+
+  test "student must pass seven questions to complete a module" do
+    module_lesson = @subject.lessons.create!(
+      title: "Módulo com avaliação",
+      summary: "Dez questões do módulo.",
+      concept: "Conceito do módulo.",
+      example: "Exemplo do módulo.",
+      question: "Questão introdutória.",
+      option_a: "A", option_b: "B", option_c: "C", option_d: "D",
+      correct_option: "a",
+      explanation: "Reveja o conteúdo.",
+      xp: 10,
+      position: 2
+    )
+    10.times do |index|
+      module_lesson.quiz_questions.create!(
+        question: "Questão #{index + 1}",
+        option_a: "Correta",
+        option_b: "Incorreta",
+        option_c: "Alternativa C",
+        option_d: "Alternativa D",
+        correct_option: "a",
+        explanation: "Revise o conceito.",
+        position: index + 1
+      )
+    end
+    answers = module_lesson.quiz_questions.each_with_index.to_h do |question, index|
+      [ question.id.to_s, index < 7 ? "a" : "b" ]
+    end
+
+    post answer_lesson_path(subject_slug: @subject.slug, id: module_lesson.id), params: { answers: answers }
+
+    assert_redirected_to lesson_path(subject_slug: @subject.slug, id: module_lesson.id, anchor: "exercicio")
+    follow_redirect!
+    assert_response :success
+    assert_select ".feedback-correct", /Módulo concluído! Você acertou 7 de 10/
+    assert_select ".completed-note"
+  end
+
   test "passing the final assessment records progress and awards XP" do
     assessment = create_assessment
 

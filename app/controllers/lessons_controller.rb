@@ -3,15 +3,13 @@ class LessonsController < ApplicationController
 
   def show
     @completed = Array(session[:completed_lesson_ids]).include?(@lesson.id.to_s)
-    return unless @lesson.assessment?
-
-    @assessment_questions = @lesson.quiz_questions.to_a
-    @assessment_passing_score = (@assessment_questions.size * 0.7).ceil
+    @quiz_questions = @lesson.quiz_questions.to_a
+    @assessment_passing_score = (@quiz_questions.size * 0.7).ceil
     @assessment_feedback = flash[:assessment_feedback]
   end
 
   def answer
-    return answer_assessment if @lesson.assessment?
+    return answer_assessment if @lesson.assessment? || @lesson.quiz_questions.exists?
 
     selected_option = params[:answer].to_s
 
@@ -67,13 +65,15 @@ class LessonsController < ApplicationController
 
     if passed
       session[:completed_lesson_ids] = (completed_ids + [ @lesson.id.to_s ]).uniq
+      result = @lesson.assessment? ? "Teste aprovado!" : "Módulo concluído!"
       flash[:notice] = if was_completed
-        "Teste aprovado! Você acertou #{correct_count} de #{questions.length}; o XP já havia sido concedido."
+        "#{result} Você acertou #{correct_count} de #{questions.length}; o XP já havia sido concedido."
       else
-        "Teste aprovado! Você acertou #{correct_count} de #{questions.length} e conquistou #{@lesson.xp} XP."
+        "#{result} Você acertou #{correct_count} de #{questions.length} e conquistou #{@lesson.xp} XP."
       end
     else
-      flash[:alert] = "Você acertou #{correct_count} de #{questions.length}. São necessárias #{passing_score} respostas certas; revise os comentários e tente novamente."
+      item = @lesson.assessment? ? "teste" : "módulo"
+      flash[:alert] = "Você acertou #{correct_count} de #{questions.length}. São necessárias #{passing_score} respostas certas para concluir o #{item}; revise os comentários e tente novamente."
     end
 
     flash[:assessment_feedback] = {

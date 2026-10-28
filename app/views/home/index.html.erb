@@ -37,7 +37,7 @@
     <div class="learning-strip-inner">
       <div class="strip-intro"><span class="strip-sparkle">✳</span><span>Seu aprendizado,<br><strong>um passo de cada vez.</strong></span></div>
       <div class="strip-stat"><strong><%= @subjects.size %></strong><span>trilhas essenciais</span></div>
-      <div class="strip-stat"><strong><%= @lesson_count %></strong><span>aulas para explorar</span></div>
+      <div class="strip-stat"><strong><%= @lesson_count %></strong><span>módulos com aulas</span></div>
       <div class="strip-stat"><strong><%= @completed_lessons_count %></strong><span><%= @completed_lessons_count == 1 ? "aula concluída" : "aulas concluídas" %></span></div>
       <div class="strip-xp"><span class="xp-icon">✦</span><span><strong><%= @earned_xp %> XP</strong><small>conquistados</small></span></div>
     </div>
@@ -56,7 +56,7 @@
           <p class="card-kicker">TRILHA <%= subject.position.to_s.rjust(2, "0") %></p>
           <h3><%= subject.name %></h3>
           <p class="card-description"><%= subject.description %></p>
-          <span class="card-footer"><%= subject.lessons.size %> aulas introdutórias <span aria-hidden="true">→</span></span>
+          <span class="card-footer"><%= subject.lessons.count { |lesson| !lesson.assessment? } %> módulos de estudo <span aria-hidden="true">→</span></span>
         <% end %>
       <% end %>
     </div>

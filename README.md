@@ -1,17 +1,30 @@
 # Quimica
 
-Uma plataforma educativa em português para estudantes de cursos técnicos e de graduação. A aplicação apresenta seis trilhas introdutórias com conceitos, exemplos e exercícios de múltipla escolha com feedback imediato.
+Uma plataforma educativa em português para estudantes de cursos técnicos e pessoas autodidatas. Cada módulo começa com explicações e exemplos passo a passo e termina com dez questões de múltipla escolha, feedback e uma meta de aprovação de 70%. As trilhas também têm avaliações finais.
 
 ## Trilhas
 
 - Química Analítica
-- Química Orgânica
+- Química Orgânica I
+- Química Orgânica II
+- Química I
+- Química II
 - Química Inorgânica
 - Físico-Química
+- Análise Instrumental
+- Tecnologia Química
+- Utilidades Industriais e Tratamento de Efluentes
+- Introdução aos Materiais e Corrosão
+- Equipamentos Industriais e Controle de Processos
+- Gestão de Processos Industriais e Empreendedorismo
 - Operações Básicas de Laboratório
 - Operações Unitárias
+- Segurança do Trabalho e Meio Ambiente
+- Estágio Curricular e TCC
+- Projeto Integrador
+- Seminários Interdisciplinares
 
-As trilhas começam pelos fundamentos. Química Analítica inclui aulas sobre planejamento, amostragem, concentração, soluções e avaliação de resultados, além de um teste final de dez questões. É preciso acertar pelo menos 70% para concluir o teste e receber XP. Nas demais aulas, as respostas corretas concluem a aula e concedem XP; o progresso fica salvo na sessão do navegador, sem necessidade de criar uma conta.
+As trilhas cobrem as disciplinas e os tópicos curriculares reunidos em `Referencias_para_desenvolver`, incluindo química analítica e instrumental, química geral e orgânica, processos industriais, utilidades, segurança e projetos. Os módulos são organizados por nível — Iniciante, Intermediário, Difícil e Profissional — e ficam acessíveis sem bloqueios. Os textos introduzem os conceitos e avançam para cálculos, interpretação de dados e aplicações técnicas. Cada módulo e cada avaliação final possui dez questões; é preciso acertar pelo menos 70% para concluir a etapa e receber XP. O progresso fica salvo na sessão do navegador, sem necessidade de criar uma conta.
 
 ## Requisitos
 
