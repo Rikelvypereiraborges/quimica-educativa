@@ -1,0 +1,20 @@
+<main class="inner-page resource-page">
+  <div class="breadcrumb"><%= link_to "Início", root_path %><span>/</span><%= link_to "Recursos", resources_path %><span>/</span><strong><%= @title %></strong></div>
+  <section class="resource-hero">
+    <p class="eyebrow">CENTRO DE RECURSOS</p>
+    <h1><%= @title %></h1>
+    <p><%= @intro %></p>
+    <% if @contact_url %><%= link_to "Abrir canal de contato →", @contact_url, class: "button button-primary", target: "_blank", rel: "noopener noreferrer" %><% end %>
+  </section>
+  <%= render "groups" %>
+    <% if @practice_checks.present? %>
+      <section class="resource-group"><h2>Teste rápido de segurança e prática</h2><div class="resource-entry-list">
+        <% @practice_checks.each do |question, options, correct, explanation| %>
+          <form class="resource-entry" data-calculator="knowledge-check" data-correct="<%= correct %>" data-explanation="<%= explanation %>">
+            <fieldset><legend><%= question %></legend><% options.each do |answer, key| %><label class="knowledge-option"><%= radio_button_tag "answer", key, false, required: true %><%= answer %></label><% end %></fieldset>
+            <button class="button button-primary">Conferir</button><output></output>
+          </form>
+        <% end %>
+      </div></section>
+    <% end %>
+</main>

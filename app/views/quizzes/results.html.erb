@@ -1,0 +1,20 @@
+<main class="inner-page resource-page">
+  <div class="breadcrumb"><%= link_to "Início", root_path %><span>/</span><%= link_to "Simulados", quizzes_path %><span>/</span><strong>Resultado</strong></div>
+  <section class="resource-hero">
+    <p class="eyebrow">RESULTADO DO SIMULADO</p><h1><%= @passed ? "Meta alcançada" : "Continue praticando" %></h1>
+    <p>Você acertou <strong><%= @correct_count %> de 10</strong>. A meta de referência é 7 acertos. As respostas e comentários estão abaixo.</p>
+  </section>
+  <div class="resource-entry-list">
+    <% @questions.each_with_index do |question, index| %>
+      <% selected = @answers[question.id.to_s] %>
+      <% correct = selected == question.correct_option %>
+      <article class="resource-entry">
+        <span class="eyebrow">QUESTÃO <%= index + 1 %> · <%= question.lesson.subject.name %></span>
+        <h2><%= question.question %></h2>
+        <p><strong><%= correct ? "Correta." : "Sua resposta: #{selected.upcase}. Gabarito: #{question.correct_option.upcase}." %></strong> <%= question.explanation %></p>
+        <% unless correct %><%= link_to "Revisar a aula →", lesson_path(subject_slug: question.lesson.subject.slug, id: question.lesson.id, anchor: "exercicio"), class: "resource-inline-link" %><% end %>
+      </article>
+    <% end %>
+  </div>
+  <%= link_to "Fazer outro simulado →", quizzes_path, class: "button button-primary certificate-link" %>
+</main>

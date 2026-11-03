@@ -1,0 +1,21 @@
+<main class="inner-page resource-page">
+  <div class="breadcrumb"><%= link_to "Início", root_path %><span>/</span><%= link_to "Simulados", quizzes_path %><span>/</span><strong>Questões</strong></div>
+  <section class="resource-hero"><p class="eyebrow">10 QUESTÕES SORTEADAS</p><h1>Hora de praticar</h1><p>Escolha uma alternativa em cada questão e envie quando terminar. O gabarito comentado aparece depois da tentativa.</p></section>
+  <%= form_with url: submit_quiz_path, method: :post, class: "mock-quiz-form" do %>
+    <% @questions.each_with_index do |question, index| %>
+      <fieldset class="assessment-question mock-question">
+        <legend><span class="assessment-question-number">Questão <%= index + 1 %> · <%= question.lesson.subject.name %></span><%= question.question %></legend>
+        <div class="answer-options">
+          <% question.answer_options.each do |key, answer| %>
+            <% input_id = "mock_answer_#{question.id}_#{key}" %>
+            <label class="answer-option" for="<%= input_id %>">
+              <%= radio_button_tag "answers[#{question.id}]", key, false, id: input_id, required: true %>
+              <span class="answer-letter"><%= key.upcase %></span><span class="answer-copy"><%= answer %></span>
+            </label>
+          <% end %>
+        </div>
+      </fieldset>
+    <% end %>
+    <%= submit_tag "Conferir simulado", class: "button button-primary answer-submit" %>
+  <% end %>
+</main>

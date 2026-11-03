@@ -1,0 +1,18 @@
+<main class="inner-page resource-page">
+  <div class="breadcrumb"><%= link_to "Início", root_path %><span>/</span><%= link_to "Recursos", resources_path %><span>/</span><strong>Simulados</strong></div>
+  <section class="resource-hero">
+    <p class="eyebrow">BANCO DE QUESTÕES</p><h1>Simulados</h1>
+    <p>Pratique com dez questões sorteadas de aulas da trilha escolhida ou de todo o curso. O conjunto mistura conceitos e aplicações, e cada resposta recebe comentário.</p>
+  </section>
+  <section class="tool-card">
+    <h2>Escolha uma trilha</h2>
+    <p><%= @question_count %> questões disponíveis no banco de módulos. A nota de referência é 7/10; simulados não concedem XP nem alteram a conclusão das trilhas.</p>
+    <%= form_with url: start_quiz_path, method: :post do |form| %>
+      <label class="quiz-track-label">Conjunto de questões
+        <%= form.select :subject_slug, options_for_select([["Curso completo", ""]] + @subjects.map { |subject| [subject.name, subject.slug] }), {}, class: "quiz-track-select" %>
+      </label>
+      <%= form.submit "Sortear 10 questões →", class: "button button-primary" %>
+    <% end %>
+  </section>
+  <p class="resource-footnote">Cada simulado escolhe perguntas do banco existente; as questões erradas podem aparecer na lista de revisão após três dias.</p>
+</main>

@@ -1,0 +1,19 @@
+<main class="inner-page resource-page">
+  <div class="breadcrumb"><%= link_to "Início", root_path %><span>/</span><%= link_to "Recursos", resources_path %><span>/</span><strong><%= @title %></strong></div>
+  <section class="resource-hero"><p class="eyebrow">CONSULTA RÁPIDA</p><h1><%= @title %></h1><p><%= @intro %></p></section>
+  <nav class="alphabet-index" aria-label="Índice alfabético">
+    <% @entries.map { |entry| entry[0][0].upcase }.uniq.each do |letter| %><a href="#letter-<%= letter %>"><%= letter %></a><% end %>
+  </nav>
+  <div class="glossary-list">
+    <% current_letter = nil %>
+    <% @entries.each do |term, definition, subject_slug| %>
+      <% letter = term[0].upcase %>
+      <% if current_letter != letter %><h2 class="glossary-letter" id="letter-<%= letter %>"><%= letter %></h2><% current_letter = letter %><% end %>
+      <% subject = @subjects_by_slug[subject_slug] %>
+      <article class="resource-entry" id="term-<%= term.parameterize %>">
+        <h3><%= term %></h3><p><%= definition %></p>
+        <% if subject %><%= link_to "Estudar em #{subject.name} →", subject_path(subject.slug), class: "resource-inline-link" %><% end %>
+      </article>
+    <% end %>
+  </div>
+</main>

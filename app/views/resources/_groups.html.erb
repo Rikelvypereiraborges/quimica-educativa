@@ -1,0 +1,13 @@
+<% @groups.each do |heading, entries| %>
+  <section class="resource-group">
+    <h2><%= heading %></h2>
+    <div class="resource-entry-list">
+      <% entries.each do |entry| %>
+        <article class="resource-entry">
+          <h3><%= entry[0] %></h3>
+          <p><%= entry[1] %></p>
+        </article>
+      <% end %>
+    </div>
+  </section>
+<% end %>

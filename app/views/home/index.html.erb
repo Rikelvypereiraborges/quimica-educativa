@@ -43,6 +43,18 @@
     </div>
   </section>
 
+  <section class="pathways-section section-wrap">
+    <div class="section-heading">
+      <div><p class="eyebrow">UM CAMINHO PARA CADA OBJETIVO</p><h2>Escolha seu <span>ponto de partida.</span></h2></div>
+      <p>As sugestões são apenas referências: você pode abrir qualquer trilha, sem bloqueios.</p>
+    </div>
+    <div class="pathways-grid">
+      <article><span>01 · FUNDAMENTOS</span><h3>Estou começando</h3><p>Construa a base em química geral e prática laboratorial.</p><%= link_to "Química I →", subject_path("quimica-i") %><%= link_to "Operações Básicas de Laboratório →", subject_path("operacoes-basicas-laboratorio") %></article>
+      <article><span>02 · APROFUNDAMENTO</span><h3>Quero avançar</h3><p>Conecte métodos de análise e processos industriais.</p><%= link_to "Química Analítica →", subject_path("quimica-analitica") %><%= link_to "Análise Instrumental →", subject_path("analise-instrumental") %></article>
+      <article><span>03 · ROTINA TÉCNICA</span><h3>Quero praticar</h3><p>Consulte roteiros, fórmulas, segurança e ferramentas de estudo.</p><%= link_to "Roteiros de laboratório →", laboratory_guides_path %><%= link_to "Ferramentas interativas →", tools_path %></article>
+    </div>
+  </section>
+
   <section class="tracks-section section-wrap" id="trilhas">
     <div class="section-heading">
       <div><p class="eyebrow">ESCOLHA POR ONDE COMEÇAR</p><h2>Conhecimento para <span>cada etapa.</span></h2></div>
@@ -77,5 +89,7 @@
     <p class="eyebrow">TODA GRANDE DESCOBERTA COMEÇA COM UMA PERGUNTA</p>
     <h2>Qual vai ser seu <span>primeiro passo?</span></h2>
     <%= link_to "Escolher minha trilha →", root_path(anchor: "trilhas"), class: "button button-light" %>
+    <%= link_to "Explorar ferramentas e materiais →", resources_path, class: "home-resource-link" %>
+    <% if @review_count.positive? %><%= link_to "Revisar #{@review_count} questões →", review_path, class: "home-resource-link" %><% end %>
   </section>
 </main>

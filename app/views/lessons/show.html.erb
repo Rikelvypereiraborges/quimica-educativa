@@ -6,10 +6,26 @@
       <p class="eyebrow">TRILHA <%= @subject.position.to_s.rjust(2, "0") %> · <%= @lesson.assessment? ? "AVALIAÇÃO FINAL" : "MÓDULO #{@lesson.position.to_s.rjust(2, "0")} · #{@lesson.difficulty_label.upcase}" %></p>
       <h1><%= @lesson.title %></h1>
       <p class="lesson-lead"><%= @lesson.summary %></p>
+      <% unless @lesson.assessment? %>
+        <section class="lesson-objectives">
+          <div><strong>Objetivos de aprendizagem</strong><ul><li>Explicar os conceitos centrais de <%= @lesson.title.downcase %>.</li><li>Relacionar a teoria a uma aplicação de laboratório ou processo.</li><li>Interpretar dados e unidades antes de tirar conclusões.</li></ul></div>
+          <div class="lesson-time"><span><%= [@lesson.concept.split.size / 25, 10].max %> min</span><small>tempo estimado</small></div>
+        </section>
+        <p class="lesson-prerequisite"><strong>Antes de começar:</strong> familiarize-se com <%= link_to(@previous_lesson ? @previous_lesson.title : "os fundamentos desta trilha", @previous_lesson ? lesson_path(subject_slug: @subject.slug, id: @previous_lesson.id) : subject_path(@subject.slug)) %>. Consulte também a <%= link_to "folha de fórmulas", formulas_path %> quando usar equações.</p>
+      <% end %>
 
       <div class="concept-card"><span class="concept-label"><%= @lesson.assessment? ? "ORIENTAÇÕES" : "A IDEIA PRINCIPAL" %></span><p><%= @lesson.concept %></p></div>
 
       <section class="example-card"><span class="example-icon">✳</span><div><span class="concept-label">NA PRÁTICA</span><p><%= @lesson.example %></p></div></section>
+      <% unless @lesson.assessment? %>
+        <section class="lesson-study-links" aria-label="Materiais de apoio para esta aula">
+          <strong>Continue estudando</strong>
+          <%= link_to "Consultar fórmulas e unidades →", formulas_path %>
+          <%= link_to "Buscar termos no glossário →", glossary_path %>
+          <%= link_to "Ver roteiros de laboratório →", laboratory_guides_path %>
+          <%= link_to "Consultar segurança e FDS →", safety_path %>
+        </section>
+      <% end %>
 
       <section class="exercise-card" id="exercicio">
         <div class="exercise-heading"><div><p class="eyebrow"><%= @lesson.assessment? ? "REVISÃO DO CONTEÚDO" : "HORA DE PRATICAR" %></p><h2><%= @lesson.assessment? ? "Teste " : "Você " %><span><%= @lesson.assessment? ? "final" : "consegue?" %></span></h2></div><span class="exercise-xp">✦ +<%= @lesson.xp %> XP</span></div>
@@ -31,7 +47,8 @@
                 </div>
                 <% if @assessment_feedback %>
                   <% correct = @assessment_feedback.dig("answers", question.id.to_s) == question.correct_option %>
-                  <p class="assessment-question-feedback <%= correct ? "is-correct" : "needs-review" %>"><%= correct ? "Resposta correta." : "Revise: #{question.explanation}" %></p>
+                  <% selected = @assessment_feedback.dig("answers", question.id.to_s) %>
+                  <p class="assessment-question-feedback <%= correct ? "is-correct" : "needs-review" %>"><strong><%= correct ? "Resposta correta." : "Sua resposta: #{selected&.upcase} · Gabarito: #{question.correct_option.upcase}." %></strong> <%= question.explanation %></p>
                 <% end %>
               </fieldset>
             <% end %>
@@ -59,12 +76,14 @@
 
       <div class="lesson-navigation">
         <%= link_to "← Todas as aulas", subject_path(@subject.slug), class: "back-link" %>
-        <%= link_to "Próxima trilha →", root_path(anchor: "trilhas"), class: "back-link" %>
+        <% if @next_lesson %><%= link_to "Próximo módulo →", lesson_path(subject_slug: @subject.slug, id: @next_lesson.id), class: "back-link" %><% else %><%= link_to "Próxima trilha →", root_path(anchor: "trilhas"), class: "back-link" %><% end %>
       </div>
     </article>
     <aside class="lesson-aside">
       <div class="aside-card"><span class="aside-icon"><%= @subject.icon %></span><p class="eyebrow">SUA TRILHA</p><h2><%= @subject.name %></h2><%= link_to "Ver todas as aulas →", subject_path(@subject.slug), class: "aside-link" %></div>
       <div class="aside-tip"><span>✦ DICA</span><p>Errou? Tudo bem. Leia a explicação e tente de novo. É assim que o aprendizado acontece.</p></div>
+      <div class="aside-tip"><span>REVISÃO</span><p>Questões erradas são lembradas em <%= link_to "Revisão", review_path %> após três dias para apoiar a prática espaçada.</p></div>
+      <div class="aside-tip"><span>REFERÊNCIAS</span><p>Confira fontes técnicas e dados em <%= link_to "Biblioteca e referências", references_path %>.</p></div>
     </aside>
   </div>
 </main>

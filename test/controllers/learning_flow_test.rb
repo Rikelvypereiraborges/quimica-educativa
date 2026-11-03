@@ -101,10 +101,11 @@ class LearningFlowTest < ActionDispatch::IntegrationTest
 
     get subject_path("quimica-organica")
     assert_response :success
-    assert_select ".lesson-level-heading h3", text: "Iniciante"
-    assert_select ".lesson-level-heading h3", text: "Intermediário"
-    assert_select ".lesson-level-heading h3", text: "Difícil"
-    assert_select ".lesson-level-heading h3", text: "Profissional"
+    assert_select ".lesson-level-badge", text: "Iniciante"
+    assert_select ".lesson-level-badge", text: "Intermediário"
+    assert_select ".lesson-level-badge", text: "Difícil"
+    assert_select ".lesson-level-badge", text: "Profissional"
+    assert_select ".track-progress"
   end
 
   test "student must pass seven questions to complete a module" do
@@ -170,6 +171,9 @@ class LearningFlowTest < ActionDispatch::IntegrationTest
     assert_select ".feedback-retry", /São necessárias 7 respostas certas/
     assert_select ".needs-review", 4
     assert_select ".completed-note", count: 0
+    get review_path
+    assert_response :success
+    assert_select ".resource-entry", 4
   end
 
   test "final assessment rejects incomplete submissions" do
@@ -211,6 +215,90 @@ class LearningFlowTest < ActionDispatch::IntegrationTest
     follow_redirect!
     assert_select ".feedback-retry"
     assert_select ".completed-note", count: 0
+  end
+
+  test "resource hub exposes all learning references and tools" do
+    get resources_path
+    assert_response :success
+    assert_select ".resource-card", 11
+
+    get glossary_path
+    assert_response :success
+    assert_select ".resource-entry"
+
+    get formulas_path
+    assert_response :success
+    assert_select ".formula-card"
+
+    get laboratory_guides_path
+    assert_response :success
+    assert_select ".lab-guide", 20
+
+    get tools_path
+    assert_response :success
+    assert_select "form[data-calculator]", 14
+
+    get safety_path
+    assert_response :success
+    assert_select ".resource-group"
+    assert_select "form[data-calculator='knowledge-check']", 10
+  end
+
+  test "periodic table includes all known elements and content search finds lessons" do
+    get periodic_table_path
+    assert_response :success
+    assert_select ".element-tile", 118
+
+    get search_path, params: { q: "Concentração" }
+    assert_response :success
+    assert_select ".search-result"
+
+    get search_path, params: { q: "Amostragem" }
+    assert_response :success
+    assert_select ".search-result", /Glossário/
+  end
+
+  test "certificate requires and recognizes completion of the full track" do
+    assessment = create_assessment
+
+    get certificate_path(slug: @subject.slug)
+    assert_redirected_to subject_path(@subject.slug)
+
+    post answer_lesson_path(subject_slug: @subject.slug, id: @lesson.id), params: { answer: "a" }
+    post answer_lesson_path(subject_slug: @subject.slug, id: assessment.id),
+      params: { answers: assessment_answers(assessment, correct_count: 10) }
+    get certificate_path(slug: @subject.slug)
+
+    assert_response :success
+    assert_select ".certificate", /Química Analítica/
+    assert_select ".certificate-disclaimer", /Não é diploma/
+  end
+
+  test "student can take a randomized ten-question mock quiz" do
+    10.times do |index|
+      @lesson.quiz_questions.create!(
+        question: "Simulado #{index + 1}",
+        option_a: "Correta",
+        option_b: "Incorreta",
+        option_c: "Alternativa C",
+        option_d: "Alternativa D",
+        correct_option: "a",
+        explanation: "Conferir a relação usada.",
+        position: index + 1
+      )
+    end
+
+    post start_quiz_path, params: { subject_slug: @subject.slug }
+    assert_redirected_to quiz_path
+    follow_redirect!
+    assert_response :success
+    assert_select ".mock-question", 10
+
+    answers = @lesson.quiz_questions.each_with_object({}) { |question, result| result[question.id.to_s] = "a" }
+    post submit_quiz_path, params: { answers: answers }
+    assert_response :success
+    assert_select ".resource-hero", /10 de 10/
+    assert_select ".resource-entry", 10
   end
 
   private

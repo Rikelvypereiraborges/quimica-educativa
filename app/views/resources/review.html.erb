@@ -1,0 +1,17 @@
+<main class="inner-page resource-page">
+  <div class="breadcrumb"><%= link_to "Início", root_path %><span>/</span><%= link_to "Recursos", resources_path %><span>/</span><strong><%= @title %></strong></div>
+  <section class="resource-hero"><p class="eyebrow">ESTUDO CONTÍNUO</p><h1><%= @title %></h1><p><%= @intro %></p></section>
+  <% if @reviews.any? %>
+    <div class="resource-entry-list">
+      <% @reviews.each do |item| %>
+        <% question = item[:question] %>
+        <article class="resource-entry">
+          <span class="eyebrow"><%= question.lesson.subject.name %></span>
+          <h2><%= question.question %></h2>
+          <p>Revisão sugerida para <%= item[:due_at].present? ? Time.iso8601(item[:due_at]).to_date.strftime("%d/%m/%Y") : "agora" %>.</p>
+          <%= link_to "Revisar a aula →", lesson_path(subject_slug: question.lesson.subject.slug, id: question.lesson.id, anchor: "exercicio"), class: "resource-inline-link" %>
+        </article>
+      <% end %>
+    </div>
+  <% else %><p class="empty-state">Sua lista está vazia. Se errar uma questão de uma avaliação, ela aparecerá aqui como lembrete para revisar.</p><% end %>
+</main>

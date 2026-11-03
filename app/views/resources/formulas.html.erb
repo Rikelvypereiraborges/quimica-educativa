@@ -1,0 +1,11 @@
+<main class="inner-page resource-page">
+  <div class="breadcrumb"><%= link_to "Início", root_path %><span>/</span><%= link_to "Recursos", resources_path %><span>/</span><strong><%= @title %></strong></div>
+  <section class="resource-hero"><p class="eyebrow">CONSULTA TÉCNICA</p><h1><%= @title %></h1><p><%= @intro %></p></section>
+  <% @groups.each do |heading, entries| %>
+    <section class="resource-group"><h2><%= heading %></h2><div class="formula-grid">
+      <% entries.each do |name, formula, note| %>
+        <article class="formula-card"><h3><%= name %></h3><p class="formula-equation"><%= formula %></p><p><%= note %></p></article>
+      <% end %>
+    </div></section>
+  <% end %>
+</main>

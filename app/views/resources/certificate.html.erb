@@ -1,0 +1,13 @@
+<main class="inner-page certificate-page">
+  <div class="breadcrumb no-print"><%= link_to "Início", root_path %><span>/</span><%= link_to @subject.name, subject_path(@subject.slug) %><span>/</span><strong>Comprovante</strong></div>
+  <article class="certificate">
+    <p class="eyebrow">QUÍMICA EDUCATIVA · COMPROVANTE DE ESTUDO</p>
+    <span class="certificate-mark" aria-hidden="true">q.</span>
+    <h1>Trilha concluída</h1>
+    <p>Este comprovante registra que o progresso desta sessão indica a conclusão de todas as etapas de:</p>
+    <h2><%= @subject.name %></h2>
+    <p class="certificate-date">Emitido em <%= @completed_at.strftime("%d/%m/%Y") %></p>
+    <p class="certificate-disclaimer">Comprovante de participação em conteúdo educativo. Não é diploma, certificado profissional, acreditação ou comprovação de competência prática.</p>
+    <button class="button button-primary no-print" type="button" onclick="window.print()">Imprimir ou salvar como PDF</button>
+  </article>
+</main>

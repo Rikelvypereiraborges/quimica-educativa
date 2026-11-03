@@ -1,0 +1,72 @@
+<main class="inner-page resource-page tools-page">
+  <div class="breadcrumb"><%= link_to "Início", root_path %><span>/</span><%= link_to "Recursos", resources_path %><span>/</span><strong><%= @title %></strong></div>
+  <section class="resource-hero"><p class="eyebrow">APRENDA TESTANDO</p><h1><%= @title %></h1><p><%= @intro %></p></section>
+  <nav class="tool-index" aria-label="Ferramentas">
+    <a href="#massa-molar">Massa molar</a><a href="#balanceador">Balanceador</a><a href="#solucoes">Soluções</a><a href="#ph">pH</a><a href="#titulacao">Titulação</a><a href="#calibracao">Calibração</a><a href="#cromatografia">Cromatografia</a><a href="#raoult">Raoult</a><a href="#processos">Processos</a><a href="#pid">PID</a><a href="#unidades">Unidades</a><a href="#relatorio">Relatório</a>
+  </nav>
+  <p class="safety-notice">Use dados de estudo e unidades coerentes. Resultados aproximados devem ser verificados por cálculo independente antes de qualquer decisão técnica.</p>
+
+  <section class="tool-card" id="massa-molar">
+    <h2>Massa molar</h2><p>Informe uma fórmula com parênteses, como Ca(OH)2 ou Al2(SO4)3.</p>
+    <form data-calculator="molar-mass"><label>Fórmula química<input name="formula" value="Ca(OH)2" required></label><button class="button button-primary">Calcular</button><output></output></form>
+  </section>
+
+  <section class="tool-card" id="balanceador">
+    <h2>Balanceador de equações</h2><p>Conserva os átomos em equações com fórmulas moleculares e coeficientes inteiros positivos.</p>
+    <form data-calculator="balance"><label>Equação não balanceada<input name="equation" value="C2H6 + O2 = CO2 + H2O" required></label><button class="button button-primary">Balancear</button><output></output></form>
+  </section>
+
+  <section class="tool-card" id="solucoes">
+    <h2>Concentração e diluição</h2>
+    <form data-calculator="molarity"><h3>Molaridade a partir da massa</h3><div class="tool-fields"><label>Massa (g)<input name="mass" type="number" step="any" min="0" required></label><label>Massa molar (g/mol)<input name="molar_mass" type="number" step="any" min="0" required></label><label>Volume final (mL)<input name="volume" type="number" step="any" min="0" required></label></div><button class="button button-primary">Calcular molaridade</button><output></output></form>
+    <form data-calculator="dilution"><h3>Diluição</h3><div class="tool-fields"><label>C₁ (mol/L)<input name="c1" type="number" step="any" min="0" required></label><label>V₁ (mL)<input name="v1" type="number" step="any" min="0" required></label><label>C₂ (mol/L)<input name="c2" type="number" step="any" min="0" required></label><label>V₂ (mL)<input name="v2" type="number" step="any" min="0" required></label></div><button class="button button-primary">Encontrar incógnita</button><output></output></form>
+  </section>
+
+  <section class="tool-card" id="ph">
+    <h2>pH e tampão</h2>
+    <form data-calculator="ph"><div class="tool-fields"><label>Modelo<select name="mode"><option value="acid">Ácido forte (concentração em mol/L)</option><option value="base">Base forte (concentração em mol/L)</option><option value="buffer">Tampão (Henderson–Hasselbalch)</option></select></label><label>Concentração ou [A⁻] (mol/L)<input name="value" type="number" step="any" min="0" required></label><label>pKa (apenas tampão)<input name="pka" type="number" step="any"></label><label>[HA] (mol/L, apenas tampão)<input name="acid" type="number" step="any" min="0"></label></div><button class="button button-primary">Calcular pH</button><output></output></form>
+    <p class="resource-footnote">Modelo simplificado: assume dissociação completa para ácido/base fortes e não corrige atividades, temperatura ou equilíbrios adicionais.</p>
+  </section>
+
+  <section class="tool-card" id="titulacao">
+    <h2>Curva de titulação (ácido forte × base forte)</h2><p>Modelo idealizado para visualizar a variação do pH em torno do ponto de equivalência.</p>
+    <form data-calculator="titration"><div class="tool-fields"><label>Volume inicial do ácido (mL)<input name="volume" type="number" value="25" min="0.001" step="any" required></label><label>Concentração do ácido (mol/L)<input name="acid" type="number" value="0.1" min="0.000001" step="any" required></label><label>Concentração da base (mol/L)<input name="base" type="number" value="0.1" min="0.000001" step="any" required></label></div><button class="button button-primary">Gerar curva</button><output></output><div class="tool-chart" aria-live="polite"></div></form>
+  </section>
+
+  <section class="tool-card" id="calibracao">
+    <h2>Curva de calibração</h2><p>Informe pares x,y separados por vírgula e a resposta da amostra; o ajuste linear não substitui a avaliação do método.</p>
+    <form data-calculator="calibration"><div class="tool-fields"><label>Padrões x (ex.: 1, 2, 3)<input name="x" value="1, 2, 3, 4" required></label><label>Sinais y (ex.: 2.1, 4.0, 6.2)<input name="y" value="2.1, 4.0, 6.2, 8.1" required></label><label>Sinal da amostra<input name="signal" type="number" step="any" value="5" required></label></div><button class="button button-primary">Ajustar reta</button><output></output><div class="tool-chart" aria-live="polite"></div></form>
+  </section>
+
+  <section class="tool-card" id="cromatografia">
+    <h2>Parâmetros cromatográficos</h2>
+    <form data-calculator="chromatography"><div class="tool-fields"><label>Tempo morto tM (min)<input name="tm" type="number" value="1" min="0" step="any" required></label><label>tR₁ (min)<input name="tr1" type="number" value="5" min="0" step="any" required></label><label>Largura w₁ (min)<input name="w1" type="number" value="0.4" min="0" step="any" required></label><label>tR₂ (min)<input name="tr2" type="number" value="5.6" min="0" step="any" required></label><label>Largura w₂ (min)<input name="w2" type="number" value="0.44" min="0" step="any" required></label></div><button class="button button-primary">Calcular k′, α, Rs e N</button><output></output></form>
+  </section>
+
+  <section class="tool-card" id="raoult">
+    <h2>Lei de Raoult: mistura binária ideal</h2>
+    <form data-calculator="raoult"><div class="tool-fields"><label>xA no líquido<input name="x" type="number" min="0" max="1" step="any" value="0.5" required></label><label>P*A (unidade de pressão)<input name="pa" type="number" min="0" step="any" value="800" required></label><label>P*B (mesma unidade)<input name="pb" type="number" min="0" step="any" value="200" required></label></div><button class="button button-primary">Calcular pressões e vapor</button><output></output></form>
+  </section>
+
+  <section class="tool-card" id="processos">
+    <h2>Escoamento e troca térmica</h2>
+    <form data-calculator="reynolds"><h3>Número de Reynolds em tubo</h3><div class="tool-fields"><label>Densidade (kg/m³)<input name="rho" type="number" min="0" step="any" required></label><label>Velocidade (m/s)<input name="velocity" type="number" min="0" step="any" required></label><label>Diâmetro (m)<input name="diameter" type="number" min="0" step="any" required></label><label>Viscosidade dinâmica (Pa·s)<input name="viscosity" type="number" min="0" step="any" required></label></div><button class="button button-primary">Calcular Reynolds</button><output></output></form>
+    <form data-calculator="lmtd"><h3>Diferença média logarítmica de temperatura</h3><div class="tool-fields"><label>ΔT₁ (K ou °C)<input name="dt1" type="number" min="0" step="any" required></label><label>ΔT₂ (mesma unidade)<input name="dt2" type="number" min="0" step="any" required></label></div><button class="button button-primary">Calcular ΔTlm</button><output></output></form>
+  </section>
+
+  <section class="tool-card" id="pid">
+    <h2>Simulador de malha PID</h2><p>Veja uma resposta idealizada de um processo normalizado de primeira ordem em malha fechada. Não use para sintonizar equipamentos reais.</p>
+    <form data-calculator="pid"><div class="tool-fields"><label>Ganho proporcional Kp<input name="kp" type="number" value="1" min="0" step="any" required></label><label>Ganho integral Ki (1/s)<input name="ki" type="number" value="0.2" min="0" step="any" required></label><label>Ganho derivativo Kd (s)<input name="kd" type="number" value="0.1" min="0" step="any" required></label><label>Constante de tempo τ (s)<input name="tau" type="number" value="2" min="0.01" step="any" required></label><label>Tempo final (s)<input name="duration" type="number" value="10" min="0.1" step="any" required></label></div><button class="button button-primary">Simular resposta ao degrau</button><output></output><div class="tool-chart" aria-live="polite"></div></form>
+  </section>
+
+  <section class="tool-card" id="unidades">
+    <h2>Conversor de unidades</h2>
+    <form data-calculator="convert"><div class="tool-fields"><label>Valor<input name="value" type="number" step="any" required></label><label>Converter de<select name="from"><option value="c">°C</option><option value="k">K</option><option value="bar">bar</option><option value="kpa">kPa</option><option value="l">L</option><option value="ml">mL</option><option value="g">g</option><option value="mg">mg</option><option value="mol_l">mol/L</option><option value="mmol_l">mmol/L</option><option value="l_min">L/min</option><option value="m3_h">m³/h</option><option value="j">J</option><option value="kj">kJ</option></select></label><label>Para<select name="to"><option value="k">K</option><option value="c">°C</option><option value="kpa">kPa</option><option value="bar">bar</option><option value="ml">mL</option><option value="l">L</option><option value="mg">mg</option><option value="g">g</option><option value="mmol_l">mmol/L</option><option value="mol_l">mol/L</option><option value="m3_h">m³/h</option><option value="l_min">L/min</option><option value="kj">kJ</option><option value="j">J</option></select></label></div><button class="button button-primary">Converter</button><output></output></form>
+  </section>
+
+  <section class="tool-card" id="relatorio">
+    <h2>Gerador de estrutura de relatório</h2><p>Crie um modelo para preencher com dados observados e cálculos próprios.</p>
+    <form data-calculator="report"><div class="tool-fields"><label>Título da prática<input name="title" value="Análise de amostra" required></label><label>Data<input name="date" type="date"></label><label>Objetivo<input name="objective" value="Descrever o objetivo e o mensurando" required></label></div><button class="button button-primary">Gerar modelo</button><output></output><textarea class="report-output" rows="12" readonly aria-label="Modelo de relatório gerado"></textarea></form>
+  </section>
+  <p class="resource-footnote">Ao utilizar estes recursos, confira o arredondamento, as unidades, as hipóteses do modelo e as referências da trilha. As ferramentas executam no navegador e não enviam os valores dos formulários ao servidor.</p>
+</main>

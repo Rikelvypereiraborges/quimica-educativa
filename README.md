@@ -26,6 +26,14 @@ Uma plataforma educativa em português para estudantes de cursos técnicos e pes
 
 As trilhas cobrem as disciplinas e os tópicos curriculares reunidos em `Referencias_para_desenvolver`, incluindo química analítica e instrumental, química geral e orgânica, processos industriais, utilidades, segurança e projetos. Os módulos são organizados por nível — Iniciante, Intermediário, Difícil e Profissional — e ficam acessíveis sem bloqueios. Os textos introduzem os conceitos e avançam para cálculos, interpretação de dados e aplicações técnicas. Cada módulo e cada avaliação final possui dez questões; é preciso acertar pelo menos 70% para concluir a etapa e receber XP. O progresso fica salvo na sessão do navegador, sem necessidade de criar uma conta.
 
+## Recursos de estudo
+
+O Centro de Recursos reúne glossário, fórmulas com unidades, biblioteca de 20 roteiros didáticos de laboratório, orientações de segurança, referências, busca nas aulas e simulados de dez questões por trilha ou do curso completo. A tabela periódica permite filtrar os 118 elementos e consultar aplicações introdutórias. As ferramentas interativas incluem massa molar, balanceamento de equações, concentração e diluição, pH simplificado, curva de titulação, calibração linear, parâmetros cromatográficos, lei de Raoult, Reynolds, diferença média logarítmica, simulação PID didática e conversão de unidades.
+
+Questões erradas em avaliações entram em uma lista de revisão sugerida após três dias. Ao concluir todos os módulos e a avaliação final de uma trilha, o estudante pode imprimir um comprovante educativo; ele não equivale a diploma ou certificação profissional. As ferramentas executam no navegador e não enviam seus valores ao servidor.
+
+Use roteiros experimentais somente com autorização, supervisão e avaliação de risco. Confirme a FDS e a versão vigente de normas e legislação em fontes oficiais.
+
 ## Requisitos
 
 - Ruby 4.0 ou compatível com Rails 8.1

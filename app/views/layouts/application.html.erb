@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Quimica | Aprenda praticando" %></title>
+    <title><%= content_for(:title) || (@lesson ? "#{@lesson.title} | #{@subject.name}" : (@title || (@subject ? @subject.name : "Quimica | Aprenda praticando"))) %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="theme-color" content="#f5f5ef">
     <meta name="description" content="Aprenda química com aulas curtas, exemplos de laboratório e exercícios práticos.">
@@ -22,6 +22,7 @@
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app %>
+    <%= javascript_include_tag "learning_tools", defer: true %>
   </head>
 
   <body>
@@ -34,10 +35,14 @@
         <nav class="main-nav" aria-label="Navegação principal">
           <%= link_to "Trilhas", root_path(anchor: "trilhas") %>
           <%= link_to "Como funciona", root_path(anchor: "como-funciona") %>
+          <%= link_to "Recursos", resources_path %>
         </nav>
         <%= link_to "Começar a estudar", root_path(anchor: "trilhas"), class: "header-cta" %>
       </div>
     </header>
+    <% if flash[:alert] || flash[:notice] %>
+      <div class="site-flash <%= flash[:alert] ? "is-alert" : "is-notice" %>" role="<%= flash[:alert] ? "alert" : "status" %>"><%= flash[:alert] || flash[:notice] %></div>
+    <% end %>
     <%= yield %>
     <footer class="site-footer">
       <div class="footer-inner">
@@ -45,6 +50,9 @@
           <span class="brand-mark">q.</span><span>quimica<span class="brand-dot">.</span></span>
         <% end %>
         <p>Aprender química também é experimentar, errar e descobrir.</p>
+        <nav class="footer-links" aria-label="Informações do projeto">
+          <%= link_to "Recursos", resources_path %><%= link_to "Sobre", about_path %><%= link_to "Contato", contact_path %><%= link_to "Termos", terms_path %><%= link_to "Privacidade", privacy_path %>
+        </nav>
         <span>Feito para quem transforma curiosidade em conhecimento.</span>
       </div>
     </footer>

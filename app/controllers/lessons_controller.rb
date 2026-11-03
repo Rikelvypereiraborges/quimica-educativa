@@ -6,6 +6,8 @@ class LessonsController < ApplicationController
     @quiz_questions = @lesson.quiz_questions.to_a
     @assessment_passing_score = (@quiz_questions.size * 0.7).ceil
     @assessment_feedback = flash[:assessment_feedback]
+    @previous_lesson = @subject.lessons.where(lesson_type: "lesson").where("position < ?", @lesson.position).order(position: :desc).first
+    @next_lesson = @subject.lessons.where(lesson_type: "lesson").where("position > ?", @lesson.position).order(:position).first
   end
 
   def answer
@@ -75,6 +77,8 @@ class LessonsController < ApplicationController
       item = @lesson.assessment? ? "teste" : "módulo"
       flash[:alert] = "Você acertou #{correct_count} de #{questions.length}. São necessárias #{passing_score} respostas certas para concluir o #{item}; revise os comentários e tente novamente."
     end
+
+    update_review_queue(questions, answers)
 
     flash[:assessment_feedback] = {
       "score" => correct_count,

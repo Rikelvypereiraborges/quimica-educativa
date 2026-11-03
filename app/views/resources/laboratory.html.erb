@@ -1,0 +1,27 @@
+<main class="inner-page resource-page">
+  <div class="breadcrumb"><%= link_to "Início", root_path %><span>/</span><%= link_to "Recursos", resources_path %><span>/</span><strong><%= @title %></strong></div>
+  <section class="resource-hero"><p class="eyebrow">PRÁTICA RESPONSÁVEL</p><h1><%= @title %></h1><p><%= @intro %></p></section>
+  <div class="safety-notice" role="note"><strong>Importante:</strong> estes roteiros são modelos de estudo, não procedimentos operacionais aprovados. Não execute uma prática sem autorização, supervisão, infraestrutura adequada e avaliação de risco.</div>
+  <div class="lab-guide-list">
+    <% @guides.each_with_index do |(title, objective, materials, procedure, safety), index| %>
+      <details class="lab-guide" id="roteiro-<%= index + 1 %>">
+        <summary><span class="lab-number"><%= (index + 1).to_s.rjust(2, "0") %></span><span><strong><%= title %></strong><small><%= objective %></small></span><span aria-hidden="true">⌄</span></summary>
+        <div class="lab-guide-content">
+          <h3>Objetivo</h3><p><%= objective %></p>
+          <h3>Materiais</h3><p><%= materials %></p>
+          <h3>Sequência didática</h3><ol><% procedure.split("; ").each do |step| %><li><%= step %></li><% end %></ol>
+          <h3>Segurança e resíduos</h3><p><%= safety %> Siga a FDS e o plano de descarte da instituição; nunca descarte resíduos sem autorização.</p>
+          <h3>Registro e discussão</h3><p>Anote identificação da amostra, equipamento, condições, valores brutos com unidades, cálculos, incerteza e desvios. Compare com o critério estabelecido no método e justifique se o resultado é aceitável.</p>
+        </div>
+      </details>
+    <% end %>
+  </div>
+  <section class="resource-group"><h2>Quiz de boas práticas</h2><div class="resource-entry-list">
+    <% @practice_checks.each do |question, options, correct, explanation| %>
+      <form class="resource-entry" data-calculator="knowledge-check" data-correct="<%= correct %>" data-explanation="<%= explanation %>">
+        <fieldset><legend><%= question %></legend><% options.each do |answer, key| %><label class="knowledge-option"><%= radio_button_tag "answer", key, false, required: true %><%= answer %></label><% end %></fieldset>
+        <button class="button button-primary">Conferir</button><output></output>
+      </form>
+    <% end %>
+  </div></section>
+</main>

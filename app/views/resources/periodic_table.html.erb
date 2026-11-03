@@ -1,0 +1,16 @@
+<main class="inner-page resource-page">
+  <div class="breadcrumb"><%= link_to "Início", root_path %><span>/</span><%= link_to "Recursos", resources_path %><span>/</span><strong><%= @title %></strong></div>
+  <section class="resource-hero"><p class="eyebrow">CONSULTA INTERATIVA</p><h1><%= @title %></h1><p><%= @intro %></p></section>
+  <label class="periodic-search">Filtrar elementos<input type="search" data-element-filter placeholder="Símbolo, nome ou número atômico"></label>
+  <div class="periodic-scroll" tabindex="0" aria-label="Tabela periódica; deslize horizontalmente em telas estreitas">
+    <div class="periodic-table" aria-label="Elementos químicos">
+      <% @elements.each do |number, symbol, name, configuration, use, column, row| %>
+        <button class="element-tile" style="grid-column: <%= column %>; grid-row: <%= row %>" type="button" data-element="<%= [number, symbol, name].join(" ").downcase %>" data-number="<%= number %>" data-symbol="<%= symbol %>" data-name="<%= name %>" data-configuration="<%= configuration %>" data-use="<%= use %>">
+          <small><%= number %></small><strong><%= symbol %></strong><span><%= name %></span>
+        </button>
+      <% end %>
+    </div>
+  </div>
+  <aside class="element-detail" aria-live="polite"><p class="eyebrow">SELECIONE UM ELEMENTO</p><h2 data-element-name>Elemento químico</h2><p data-element-configuration></p><p data-element-use></p></aside>
+  <p class="resource-footnote">Configurações eletrônicas apresentadas em notação resumida e usos apenas exemplificativos. Consulte fontes especializadas para dados atualizados, propriedades completas e segurança.</p>
+</main>

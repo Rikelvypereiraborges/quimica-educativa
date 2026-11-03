@@ -1,0 +1,21 @@
+<main class="inner-page resource-page">
+  <div class="breadcrumb"><%= link_to "Início", root_path %><span>/</span><strong>Recursos</strong></div>
+  <section class="resource-hero">
+    <p class="eyebrow">APOIO PARA ESTUDAR</p>
+    <h1><%= @title %></h1>
+    <p><%= @intro %></p>
+    <%= form_with url: search_path, method: :get, class: "resource-search" do |form| %>
+      <%= form.label :q, "O que você quer aprender?" %>
+      <div><%= form.search_field :q, placeholder: "Ex.: pH, destilação, calibração", required: true %><%= form.submit "Buscar", class: "button button-primary" %></div>
+    <% end %>
+  </section>
+  <div class="resource-grid">
+    <% @cards.each do |title, description, path| %>
+      <%= link_to path, class: "resource-card" do %>
+        <span class="resource-card-mark" aria-hidden="true">↗</span>
+        <h2><%= title %></h2>
+        <p><%= description %></p>
+      <% end %>
+    <% end %>
+  </div>
+</main>
